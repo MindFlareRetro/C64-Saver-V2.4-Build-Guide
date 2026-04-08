@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C64 Saver V2.4 Build Guide — MindFlareRetro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aldrich&family=Blinker:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── CSS Custom Properties ───────────────────────────────────── */
+    :root {
+      --mfr-blue:       #2B76D8;
+      --mfr-blue-dark:  #1a5aad;
+      --mfr-navy:       #0f1e36;
+      --mfr-navy-mid:   #1a2a4a;
+      --mfr-white:      #ffffff;
+      --color-bg:       #f4f6f9;
+      --color-surface:  #ffffff;
+      --color-border:   #d0d8e4;
+      --color-text:     #1c2733;
+      --color-muted:    #5a6a7a;
+      --color-warn-bg:  #fdeded;
+      --color-warn-bdr: #c62828;
+      --color-warn-txt: #7f1111;
+      --color-caut-bg:  #fff8e6;
+      --color-caut-bdr: #e65100;
+      --color-caut-txt: #7a3000;
+      --color-tip-bg:   #e8f0fd;
+      --color-tip-bdr:  #2B76D8;
+      --color-tip-txt:  #14397a;
+      --color-note-bg:  #e8f7f0;
+      --color-note-bdr: #2e7d52;
+      --color-note-txt: #1a4d30;
+      --header-h:       64px;
+      --toc-w:          260px;
+      --font-head:      'Aldrich', 'Helvetica Neue', sans-serif;
+      --font-body:      'Blinker', 'Helvetica Neue', sans-serif;
+      --radius:         8px;
+      --shadow:         0 2px 12px rgba(15,30,54,0.12);
+    }
+
+    /* ── Reset & Base ────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: var(--font-body);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; }
+    h2 { font-size: 1.65rem; color: var(--mfr-navy-mid); margin-bottom: .5rem; }
+    h3 { font-size: 1.25rem; color: var(--mfr-navy-mid); margin-bottom: .4rem; margin-top: 1.25rem; }
+    h4 { font-size: 1.05rem; color: var(--mfr-blue-dark); margin-bottom: .3rem; }
+    p  { margin-bottom: .85rem; }
+    a  { color: var(--mfr-blue); }
+    a:hover { color: var(--mfr-blue-dark); }
+    ul, ol { padding-left: 1.4rem; margin-bottom: .85rem; }
+    li { margin-bottom: .3rem; }
+    strong { font-weight: 700; }
+    code {
+      font-family: 'Courier New', monospace;
+      background: #eef2fa;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: .9em;
+    }
+    hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+    img { max-width: 100%; height: auto; border-radius: var(--radius); display: block; }
+
+    /* ── Sticky Header ───────────────────────────────────────────── */
+    #site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      height: var(--header-h);
+      background: var(--mfr-blue);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0 1.25rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    }
+    #mfr-logo-link { display: flex; align-items: center; flex-shrink: 0; }
+    #mfr-logo { height: 48px; width: auto; border-radius: 0; }
+    #guide-title {
+      flex: 1;
+      font-family: var(--font-head);
+      color: var(--mfr-white);
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+      margin-left: 3.5rem;
+    }
+    #guide-title .title-main {
+      font-size: 1.15rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    #guide-title .title-sub {
+      font-size: .75rem;
+      color: #d0e8ff;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    #skill-toggle {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      flex-shrink: 0;
+    }
+    .toggle-label {
+      color: #d0e8ff;
+      font-size: .8rem;
+      font-family: var(--font-head);
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .skill-btn {
+      font-family: var(--font-head);
+      font-size: .7rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      padding: .28rem .65rem;
+      border-radius: 20px;
+      border: 2px solid rgba(255,255,255,0.5);
+      background: transparent;
+      color: #d0e8ff;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+    .skill-btn:hover { border-color: #fff; color: #fff; }
+    .skill-btn.active {
+      background: #fff;
+      border-color: #fff;
+      color: var(--mfr-blue);
+    }
+
+    /* ── Layout ──────────────────────────────────────────────────── */
+    #layout {
+      display: flex;
+      align-items: flex-start;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 .75rem;
+    }
+
+    /* ── Table of Contents ───────────────────────────────────────── */
+    #toc {
+      width: var(--toc-w);
+      min-width: var(--toc-w);
+      position: sticky;
+      top: calc(var(--header-h) + 1rem);
+      max-height: calc(100vh - var(--header-h) - 2rem);
+      overflow-y: auto;
+      padding: 1rem .75rem 1rem 0;
+      margin-right: .5rem;
+      scrollbar-width: thin;
+    }
+    #toc h5 {
+      font-family: var(--font-head);
+      font-size: .7rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: .6rem;
+      padding-bottom: .4rem;
+      border-bottom: 2px solid var(--mfr-blue);
+    }
+    #toc ul { list-style: none; padding: 0; margin: 0; }
+    #toc li { margin: 0; }
+    #toc a {
+      display: block;
+      padding: .3rem .5rem;
+      font-size: .85rem;
+      color: var(--color-muted);
+      text-decoration: none;
+      border-radius: 5px;
+      border-left: 3px solid transparent;
+      transition: all .15s;
+      line-height: 1.3;
+    }
+    #toc a:hover, #toc a.toc-active {
+      background: #e8f0fd;
+      color: var(--mfr-blue);
+      border-left-color: var(--mfr-blue);
+    }
+    #toc .toc-sub a {
+      padding-left: 1.1rem;
+      font-size: .8rem;
+    }
+
+    /* ── Main Content ────────────────────────────────────────────── */
+    #main-content {
+      flex: 1;
+      min-width: 0;
+      padding: 1.5rem 0 2rem;
+    }
+    section {
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      padding: 1.75rem 2rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow);
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: 1.1rem;
+      padding-bottom: .75rem;
+      border-bottom: 3px solid var(--mfr-blue);
+    }
+    .section-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--mfr-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    /* ── Callout Boxes ───────────────────────────────────────────── */
+    .callout {
+      border-radius: var(--radius);
+      padding: .9rem 1.1rem;
+      margin: 1rem 0;
+      border-left: 5px solid;
+      display: flex;
+      gap: .75rem;
+    }
+    .callout-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: .05rem; }
+    .callout-body { flex: 1; }
+    .callout-body p:last-child { margin-bottom: 0; }
+    .callout-title { font-family: var(--font-head); font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: .3rem; }
+    .warning {
+      background: var(--color-warn-bg);
+      border-color: var(--color-warn-bdr);
+      color: var(--color-warn-txt);
+    }
+    .warning .callout-title { color: var(--color-warn-bdr); }
+    .caution {
+      background: var(--color-caut-bg);
+      border-color: var(--color-caut-bdr);
+      color: var(--color-caut-txt);
+    }
+    .caution .callout-title { color: var(--color-caut-bdr); }
+    .tip {
+      background: var(--color-tip-bg);
+      border-color: var(--color-tip-bdr);
+      color: var(--color-tip-txt);
+    }
+    .tip .callout-title { color: var(--mfr-blue-dark); }
+    .note {
+      background: var(--color-note-bg);
+      border-color: var(--color-note-bdr);
+      color: var(--color-note-txt);
+    }
+    .note .callout-title { color: var(--color-note-bdr); }
+
+    /* ── Step Boxes ──────────────────────────────────────────────── */
+    .step-block {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      margin-bottom: 1.25rem;
+      overflow: hidden;
+    }
+    .step-header {
+      background: var(--mfr-navy-mid);
+      color: white;
+      padding: .7rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .step-number {
+      background: var(--mfr-blue);
+      color: white;
+      font-family: var(--font-head);
+      font-size: .85rem;
+      padding: .2rem .6rem;
+      border-radius: 4px;
+      letter-spacing: .04em;
+      flex-shrink: 0;
+    }
+    .step-title-text {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      letter-spacing: .03em;
+    }
+    .step-body { padding: 1.1rem 1.25rem; }
+    .step-body > *:last-child { margin-bottom: 0; }
+    .optional-badge {
+      font-size: .7rem;
+      background: #e8f0fd;
+      color: var(--mfr-blue);
+      padding: .15rem .5rem;
+      border-radius: 12px;
+      font-family: var(--font-head);
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      border: 1px solid var(--mfr-blue);
+      margin-left: auto;
+    }
+
+    /* ── Images & Captions ───────────────────────────────────────── */
+    .img-block {
+      margin: 1rem auto;
+      text-align: center;
+      display: table;
+    }
+    .img-block img {
+      max-height: 420px;
+      object-fit: contain;
+      margin: 0 auto;
+      box-shadow: var(--shadow);
+    }
+    .img-block.img-wide img { max-height: 540px; }
+    .img-block.img-sm img { max-height: 280px; }
+
+    /* ── Lightbox-enabled images ────────────────────────────────── */
+    .img-enlarge {
+      position: relative;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .img-enlarge::after {
+      content: '\1F50D';
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      font-size: 1.3rem;
+      background: rgba(255,255,255,0.85);
+      color: #fff;
+      border-radius: 4px;
+      padding: 4px 8px;
+      pointer-events: none;
+      line-height: 1;
+      border: 1px solid rgba(0,0,0,0.2);
+    }
+    .img-enlarge:hover { opacity: 0.9; }
+
+    /* ── Lightbox overlay ───────────────────────────────────────── */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0,0,0,0.85);
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+    #lightbox.active { display: flex; }
+    #lightbox img {
+      max-width: 92vw;
+      max-height: 92vh;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 0 40px rgba(0,0,0,0.6);
+    }
+
+    /* ── Theory images — equal width ────────────────────────────── */
+    .img-block.img-theory img {
+      max-height: none;
+      width: 100%;
+      max-width: 560px;
+    }
+    .img-caption {
+      font-size: .8rem;
+      color: var(--color-muted);
+      margin-top: .4rem;
+      font-style: italic;
+      display: table-caption;
+      caption-side: bottom;
+    }
+    .img-row {
+      display: flex;
+      gap: 1rem;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .img-row .img-block { flex: 1; min-width: 180px; display: block; margin: 0; }
+    .img-row .img-block .img-caption { display: block; }
+
+    /* ── Bill of Materials Table ─────────────────────────────────── */
+    .bom-table-wrap { overflow-x: auto; }
+    .bom-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+    }
+    .bom-table th {
+      background: var(--mfr-navy-mid);
+      color: white;
+      font-family: var(--font-head);
+      font-size: .78rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      padding: .55rem .75rem;
+      text-align: left;
+      white-space: nowrap;
+    }
+    .bom-table td {
+      padding: .5rem .75rem;
+      border-bottom: 1px solid var(--color-border);
+      vertical-align: top;
+    }
+    .bom-table tr:nth-child(even) td { background: #f7f9fc; }
+    .bom-table tr:hover td { background: #eef3fb; }
+    .bom-table .ref { font-family: monospace; font-weight: 700; color: var(--mfr-navy-mid); white-space: nowrap; }
+    .bom-table .pn  { font-family: monospace; font-size: .82rem; color: var(--color-muted); }
+    .bom-links { display: flex; flex-direction: column; gap: .2rem; }
+    .bom-links a {
+      font-size: .8rem;
+      padding: .15rem .4rem;
+      border-radius: 4px;
+      display: inline-block;
+      white-space: nowrap;
+    }
+    .lnk-ca { background: #e8f0fd; color: #14397a; border: 1px solid #b3ccf7; }
+    .lnk-us { background: #e6f4ea; color: #1a5c2e; border: 1px solid #a8d8b0; }
+    .bom-section-header td {
+      background: var(--mfr-blue) !important;
+      color: white;
+      font-family: var(--font-head);
+      font-size: .75rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .35rem .75rem;
+    }
+
+    /* ── Resistor Color Code ─────────────────────────────────────── */
+    .rcc-table { width: 100%; border-collapse: collapse; font-size: .85rem; margin: .75rem 0; }
+    .rcc-table th {
+      background: #2a3a5a;
+      color: white;
+      padding: .4rem .65rem;
+      font-family: var(--font-head);
+      font-size: .75rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      text-align: left;
+    }
+    .rcc-table td { padding: .4rem .65rem; border-bottom: 1px solid #dde3ed; }
+    .rcc-table tr:nth-child(even) td { background: #f5f7fb; }
+    .color-swatch {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border-radius: 3px;
+      border: 1px solid rgba(0,0,0,.2);
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+    .bands { display: flex; gap: 3px; align-items: center; }
+    .band {
+      width: 14px;
+      height: 22px;
+      border-radius: 2px;
+      border: 1px solid rgba(0,0,0,.15);
+      display: inline-block;
+    }
+
+    /* ── YouTube Embeds ──────────────────────────────────────────── */
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+    .video-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .video-card .yt-wrap {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+    }
+    .video-card .yt-wrap iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+    .video-card .video-label {
+      background: var(--mfr-navy-mid);
+      color: white;
+      font-family: var(--font-head);
+      font-size: .8rem;
+      letter-spacing: .04em;
+      padding: .5rem .75rem;
+      text-transform: uppercase;
+    }
+
+    /* ── DIN Pinout Diagram ──────────────────────────────────────── */
+    .pin-table { width: 100%; border-collapse: collapse; font-size: .88rem; margin: .75rem 0; }
+    .pin-table th {
+      background: var(--mfr-navy-mid);
+      color: white;
+      padding: .4rem .75rem;
+      font-family: var(--font-head);
+      font-size: .75rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      text-align: left;
+    }
+    .pin-table td { padding: .45rem .75rem; border-bottom: 1px solid var(--color-border); }
+    .pin-table tr:nth-child(even) td { background: #f5f7fb; }
+    .wire-swatch {
+      display: inline-block;
+      width: 32px; height: 10px;
+      border-radius: 5px;
+      vertical-align: middle;
+      margin-right: 5px;
+      border: 1px solid rgba(0,0,0,.2);
+    }
+    .pin-num {
+      font-family: monospace;
+      font-weight: 700;
+      background: var(--mfr-blue);
+      color: white;
+      padding: .1rem .4rem;
+      border-radius: 4px;
+      font-size: .85rem;
+    }
+
+    /* ── Skill-Level Visibility ──────────────────────────────────── */
+    .novice-only { display: block; }
+    body.skill-intermediate .novice-only { display: none; }
+    body.skill-intermediate .novice-only.inline { display: none !important; }
+
+    /* ── Hero ────────────────────────────────────────────────────── */
+    #hero {
+      background: linear-gradient(135deg, var(--mfr-navy) 0%, var(--mfr-navy-mid) 60%, #1e3a6a 100%);
+      border-radius: var(--radius);
+      padding: 2.25rem 2rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      box-shadow: var(--shadow);
+      flex-wrap: wrap;
+    }
+    .hero-text { flex: 1; min-width: 240px; }
+    .hero-logo { max-height: 80px; width: auto; }
+    @keyframes bolt-strike {
+      0%, 85.5%, 100% { fill: #e8f0fd; filter: none; opacity: 1; }
+      87%  { fill: #ffffff; filter: drop-shadow(0 0 8px #fff) drop-shadow(0 0 18px #90c8ff); opacity: 1; }
+      87.9% { fill: #e8f0fd; filter: none; opacity: 0.7; }
+      89.4% { fill: #ffffff; filter: drop-shadow(0 0 6px #fff) drop-shadow(0 0 14px #90c8ff); opacity: 1; }
+      90.2% { fill: #e8f0fd; filter: none; }
+    }
+    #hero-bolt path { animation: bolt-strike 6s ease-in-out infinite; }
+    .hero-title {
+      font-family: var(--font-head);
+      font-size: 2.6rem;
+      color: white;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      line-height: 1.1;
+      margin-bottom: .5rem;
+    }
+    .hero-subtitle {
+      color: #8aafd8;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+    .hero-pill {
+      display: inline-block;
+      background: var(--mfr-blue);
+      color: white;
+      font-family: var(--font-head);
+      font-size: .7rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .25rem .75rem;
+      border-radius: 20px;
+    }
+    .hero-img { flex: 0 0 360px; max-width: 360px; }
+    .hero-img img { border-radius: var(--radius); box-shadow: 0 4px 20px rgba(0,0,0,.4); }
+
+    /* ── Footer ──────────────────────────────────────────────────── */
+    #site-footer {
+      background: var(--mfr-navy);
+      color: #8aafd8;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      margin-top: 1.5rem;
+      font-size: .82rem;
+    }
+    #site-footer img { margin: 0 auto .75rem; max-height: 36px; border-radius: 0; }
+    #site-footer a { color: #6eaae0; }
+    #site-footer .footer-disclaimer {
+      max-width: 700px;
+      margin: .75rem auto 0;
+      font-size: .75rem;
+      line-height: 1.5;
+      color: #5a7a9a;
+    }
+
+    /* ── Misc ────────────────────────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      font-size: .7rem;
+      font-family: var(--font-head);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: .15rem .5rem;
+      border-radius: 10px;
+      vertical-align: middle;
+    }
+    .badge-blue { background: #dce9fb; color: #14397a; border: 1px solid #b3cdf7; }
+    .badge-warn { background: #fdecea; color: #7f1111; border: 1px solid #f5b8b8; }
+    .badge-ok   { background: #e6f4ea; color: #1a5c2e; border: 1px solid #a8d8b0; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .two-col > * { min-width: 0; }
+
+    /* ── Responsive ──────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      :root { --toc-w: 200px; }
+      #guide-title .title-sub { display: none; }
+    }
+    /* ── TOC collapsible (mobile) ────────────────────────────────── */
+    #toc-toggle {
+      display: none;
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: .6rem .75rem;
+      font-family: var(--font-head);
+      font-size: .75rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      text-align: left;
+      align-items: center;
+      justify-content: space-between;
+      gap: .5rem;
+    }
+    #toc-toggle:hover { color: var(--mfr-blue); }
+    #toc-toggle .toc-toggle-arrow {
+      font-size: .7rem;
+      transition: transform .2s ease;
+      flex-shrink: 0;
+    }
+    #toc.toc-open  #toc-toggle .toc-toggle-arrow { transform: rotate(180deg); }
+
+    @media (max-width: 720px) {
+      html { scroll-padding-top: calc(var(--header-h) + 52px); }
+      #layout { flex-direction: column; width: 100%; }
+      #main-content { padding-top: 2.25rem; min-width: 0; max-width: 100%; overflow-x: hidden; }
+      section { max-width: 100%; overflow-x: hidden; }
+      .img-row { flex-wrap: wrap; }
+      .img-row .img-block { min-width: calc(50% - .5rem); }
+      #toc {
+        position: sticky;
+        top: var(--header-h);
+        z-index: 900;
+        width: 100%; min-width: 0;
+        max-height: none; padding: 0; margin: 0 0 .75rem;
+        border-bottom: 2px solid var(--mfr-blue);
+        border-radius: 0;
+        overflow: hidden;
+        background: var(--color-surface);
+        box-shadow: 0 8px 20px rgba(15,30,54,0.22);
+      }
+      #toc h5 { display: none; }
+      #toc-toggle { display: flex; }
+      #toc-links {
+        display: none;
+        padding: .4rem .75rem .75rem;
+      }
+      #toc.toc-open #toc-links { display: block; }
+      #toc a { font-size: .82rem; padding: .25rem .5rem; }
+      #toc .toc-sub a { font-size: .77rem; }
+      section { padding: 1.25rem 1.1rem; }
+      .hero-img { display: none; }
+      .two-col { grid-template-columns: 1fr; }
+      #guide-title .title-main { font-size: .95rem; }
+      .toggle-label { display: none; }
+    }
+    @media (max-width: 480px) {
+      :root { --header-h: 56px; }
+      #mfr-logo { height: 34px; }
+      section { padding: 1rem .85rem; }
+    }
+  </style>
+</head>
+
+<body class="skill-novice">
+
+<!-- ════════════════════════════════════════════════════════════════
+     STICKY HEADER
+════════════════════════════════════════════════════════════════ -->
+<header id="site-header">
+  <a href="https://www.mindflareretro.com" target="_blank" rel="noopener" id="mfr-logo-link">
+    <img src="img/mfr-banner-logo-anim.gif" alt="MindFlareRetro" id="mfr-logo">
+  </a>
+  <div id="guide-title">
+    <span class="title-main">C64 Saver V2.4 Build Guide</span>
+    <!-- <span class="title-sub">Design by bwack &nbsp;·&nbsp; Presented by MindFlareRetro</span> -->
+  </div>
+  <div id="skill-toggle">
+    <span class="toggle-label">Skill Level:</span>
+    <button class="skill-btn active" id="btn-novice" onclick="setSkill('novice')">Novice</button>
+    <button class="skill-btn" id="btn-intermediate" onclick="setSkill('intermediate')">Expert</button>
+  </div>
+</header>
+
+<!-- ════════════════════════════════════════════════════════════════
+     PAGE LAYOUT WRAPPER
+════════════════════════════════════════════════════════════════ -->
+<div id="layout">
+
+  <!-- ── TABLE OF CONTENTS ─────────────────────────────────────── -->
+  <nav id="toc" aria-label="Table of Contents">
+    <h5>Contents</h5>
+    <button id="toc-toggle" onclick="toggleToc()" aria-expanded="false" aria-controls="toc-links">
+      <span>Contents</span>
+      <span class="toc-toggle-arrow">&#9660;</span>
+    </button>
+    <div id="toc-links">
+    <ul>
+      <li><a href="#intro">Introduction</a></li>
+      <li><a href="#safety">Safety &amp; Disclaimer</a></li>
+      <li><a href="#theory">Theory of Operation</a></li>
+      <li class="novice-only"><a href="#tools">What You'll Need</a></li>
+      <li><a href="#bom">Bill of Materials</a></li>
+      <li><a href="#videos">Video Series</a></li>
+      <li><a href="#build">Step-by-Step Build</a></li>
+      <ul class="toc-sub">
+        <li><a href="#step-resistors-read">Reading Resistors</a></li>
+        <li><a href="#step-1">Step 1: Solder Resistors</a></li>
+        <li><a href="#step-2">Step 2: Install Jumpers</a></li>
+        <li><a href="#step-3">Step 3: Solder C1</a></li>
+        <li><a href="#step-4">Step 4: Solder D1, D2, D3</a></li>
+        <li><a href="#step-5">Step 5: Solder Q1</a></li>
+        <li><a href="#step-6">Step 6: Solder Q2 (SMD)</a></li>
+        <li><a href="#step-7">Step 7: Wire DIN Connectors</a></li>
+        <li><a href="#step-8">Step 8: Connect to PCB</a></li>
+        <li><a href="#step-9">Step 9: Final Assembly</a></li>
+        <li><a href="#step-led">Optional: LED Indicator</a></li>
+      </ul>
+      <li><a href="#testing">Testing &amp; Verification</a></li>
+      <li><a href="#credits">Credits &amp; Attribution</a></li>
+    </ul>
+    </div><!-- /toc-links -->
+  </nav>
+
+  <!-- ── MAIN CONTENT ──────────────────────────────────────────── -->
+  <div id="main-content">
+
+    <!-- HERO -->
+    <div id="hero">
+      <div class="hero-text">
+        <svg class="hero-logo" viewBox="0 0 612 252" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="C64 Saver Logo" style="margin-bottom:.85rem;">
+          <!-- Text paths -->
+          <g fill="#e8f0fd" stroke="none">
+            <!-- Main SAVER letters -->
+            <path d="M251.293,80.853h41.657v7.143c0,2.532-1.362,3.794-4.08,3.794h-31.78v39.955h28.129c4.865,0,7.301,2.679,7.301,8.036c0,15.925,0,32.143,0,48.661c0,5.657-1.933,8.482-5.798,8.482h-41.228v-11.83h34.571v-41.294h-28.559c-4.009-0.593-6.013-3.198-6.013-7.813V87.549C245.495,83.085,247.428,80.853,251.293,80.853z"/>
+            <path d="M335.037,81.076h7.301l35.217,115.847h-5.799h-2.576c-3.006,0-5.084-1.932-6.227-5.804c-1.863-6.396-3.436-11.53-4.725-15.401l-1.934-5.581H320.65l-3.435,11.831c-1.577,5.357-2.506,8.335-2.792,8.928c-1.433,3.722-4.369,5.73-8.804,6.027c-2.147,0-4.294,0-6.441,0l3.006-9.598L335.037,81.076z M339.117,107.192l-15.246,51.785h29.418L339.117,107.192z"/>
+            <path d="M475.254,80.629h16.964h21.902v3.795c0,4.764-1.647,7.143-4.938,7.143c-9.878,0-19.755,0-29.633,0v40.178h21.258v12.054h-21.258v41.071h34.571v12.054h-21.688c-6.013,0-12.024,0-18.037,0c-5.153,0-7.73-3.495-7.73-10.491V90.451C466.666,83.905,469.528,80.629,475.254,80.629z"/>
+            <path d="M567.802,143.799l12.024,25.669c4.295,9.079,8.516,18.23,12.669,27.455c-2.147,0-4.224,0-6.227,0c-3.58,0-6.228-1.486-7.945-4.464c-3.436-6.546-7.23-14.136-11.381-22.768l-12.454-25.893h-19.325v53.125h-11.811c0-68.153,0-104.76,0-109.821c0-4.018,1.859-6.026,5.583-6.026h45.952c3.721,0,5.583,2.009,5.583,6.026v52.232c0,2.979-1.503,4.464-4.51,4.464H567.802z M535.164,131.745h21.473h12.454V91.567h-33.927V131.745z"/>
+            <!-- V -->
+            <path d="M367.5,80.673c1.864,0,3.729,0,5.593,0c2.33,0,4.193,0.584,5.592,1.752c1.551,1.167,2.64,2.919,3.262,5.255l30.058,109.192L440.198,87.68c0.775-2.723,2.017-4.571,3.728-5.547c1.552-0.972,3.339-1.46,5.359-1.46h5.825c-0.466,1.948-13.048,52.361-37.746,151.234H405.48C382.18,139.649,369.518,89.24,367.5,80.673z"/>
+            <!-- Bottom small text -->
+            <path d="M467.132,229.436v-23.643h11.042c0.92,0,1.38,0.425,1.38,1.275c0,1.177,0,4.251,0,9.222v0.785c0.675,0,1.013,0.311,1.013,0.932v12.066c0,0.883-0.552,1.324-1.656,1.324h-10.03C467.714,231.397,467.132,230.744,467.132,229.436z M476.978,217.124v-8.878h-7.361v8.878H476.978z M469.617,219.871v8.927h8.374v-8.927H469.617z"/>
+            <path d="M482.591,205.989c0.521,0,1.059,0,1.61,0c0.583,0,1.013,0.294,1.289,0.883l4.831,9.565l4.738-9.565c0.307-0.588,0.767-0.883,1.381-0.883h1.564l-6.396,13.93v11.478h-2.484v-11.478L482.591,205.989z"/>
+            <path d="M509.37,229.436v-23.643h11.042c0.92,0,1.38,0.425,1.38,1.275c0,1.177,0,4.251,0,9.222v0.785c0.675,0,1.013,0.311,1.013,0.932v12.066c0,0.883-0.552,1.324-1.656,1.324h-10.03C509.952,231.397,509.37,230.744,509.37,229.436z M519.215,217.124v-8.878h-7.361v8.878H519.215z M511.854,219.871v8.927h8.374v-8.927H511.854z"/>
+            <path d="M526.624,205.891c0.613,0.066,0.95,0.393,1.012,0.981l2.163,18.443l0.092,0.196l4.095-9.712c0.337-0.687,0.751-1.03,1.242-1.03c0.03,0,0.062,0,0.093,0c0.552,0,0.98,0.343,1.288,1.03l4.141,10.056l2.53-19.081c0.093-0.588,0.49-0.883,1.196-0.883h1.288l-2.807,23.741c-0.153,1.177-0.644,1.766-1.472,1.766h-1.288l-4.924-11.331c-1.104,2.714-2.699,6.491-4.784,11.331h-1.749c-0.491,0-0.798-0.409-0.92-1.226c-0.706-5.854-1.672-13.947-2.898-24.28H526.624z"/>
+            <path d="M554.229,205.94h1.564l7.546,25.457h-1.242h-0.553c-0.644,0-1.089-0.425-1.334-1.275c-0.398-1.406-0.736-2.534-1.012-3.384l-0.414-1.227h-7.638l-0.736,2.6c-0.338,1.177-0.537,1.832-0.599,1.962c-0.307,0.817-0.936,1.259-1.886,1.324c-0.46,0-0.921,0-1.381,0l0.645-2.109L554.229,205.94z M555.103,211.679l-3.267,11.38h6.304L555.103,211.679z"/>
+            <path d="M567.02,206.038h8.328v0.687c0,1.243-0.399,1.881-1.196,1.913c-0.215,0-2.362,0-6.441,0v20.16h7.638v2.6h-8.236c-1.227,0-1.84-0.817-1.84-2.453c0-3.4,0-6.801,0-10.203v-10.889C565.302,206.644,565.885,206.038,567.02,206.038z"/>
+            <path d="M579.075,205.842h2.669v11.232h2.255c0.397-0.032,0.72-0.311,0.966-0.834l2.393-5.249c0.398-0.85,1.012-2.158,1.841-3.924c0.397-0.817,0.996-1.226,1.794-1.226h1.519l-5.567,12.36l5.981,13.195h-1.196c-0.951,0-1.642-0.425-2.07-1.275c-0.768-1.569-2.438-5.035-5.016-10.398h-2.898v11.674h-2.669V205.842z"/>
+            <!-- Top small text (C64) -->
+            <path d="M248.853,32.862h14.654v1.03c0,1.865-0.702,2.821-2.105,2.87c-0.378,0-4.157,0-11.335,0v30.24h13.44V70.9h-14.493c-2.159,0-3.238-1.226-3.238-3.679c0-5.101,0-10.202,0-15.304V35.584C245.829,33.77,246.855,32.862,248.853,32.862z"/>
+            <path d="M272.171,32.788c4.965,0,9.931,0,14.897,0v1.619c0,1.227-0.676,1.839-2.024,1.839h-10.85V49.49c4.965,0,9.931,0,14.897,0c1.403,0,2.105,0.662,2.105,1.987V70.9H272.09c-1.35,0-2.024-0.613-2.024-1.839V34.627C270.065,33.402,270.767,32.788,272.171,32.788z M287.068,52.948h-12.874v14.495h12.874V52.948z"/>
+            <path d="M314.677,32.788c1.295,0,2.132,0,2.51,0l-14.493,26.193h10.364v-3.899v-3.679c0-1.275,0.674-1.913,2.024-1.913h2.024v19.498c0,1.276-0.676,1.913-2.024,1.913h-2.024v-8.388h-17.003l15.626-28.106C312.221,33.329,313.22,32.788,314.677,32.788z"/>
+          </g>
+          <!-- Lightning bolt — animated -->
+          <g id="hero-bolt">
+            <path fill="#e8f0fd" d="M119.267,32.769c2.396-0.305,4.833-0.099,7.229-0.397c20.333-0.604,40.687,1.345,60.645,5.24c5.681,1.263,11.403,2.313,16.777,4.614c-0.332,9.811-2.013,19.513-4.362,29.026c9.758,2.963,19.46,6.136,29.206,9.148c0.415,0.169,1.021,0.146,1.217,0.636c-10.063,4.107-20.067,8.36-30.104,12.536c-0.438,0.172-0.921,0.454-1.393,0.192c-9.758-3.112-19.554-6.108-29.286-9.277c0.947-3.858,2.263-7.64,3.265-11.495c1.365-4.69,2.43-9.46,3.371-14.25c-2.523-0.971-5.178-1.508-7.816-2.045c-16.706-3.318-33.706-5.27-50.744-5.343c-2.744-0.354-5.489,0.169-8.24,0.034c-3.375,10.487-6.043,21.184-8.923,31.813c8.167-0.395,16.271-1.564,24.439-1.936c-1.883,5.141-4.067,10.172-6.083,15.264c-8.187,20.146-16.739,40.14-24.87,60.31c-3.288,8.101-6.725,16.139-10.133,24.187c-0.302-0.017-0.603-0.03-0.905-0.043c-0.02-1.392,0.484-2.711,0.769-4.057c5.492-23.709,11.293-47.349,16.566-71.108c-11.147,2.867-22.135,6.328-33.318,9.056c4.936-20.021,10.448-39.901,15.396-59.918c-2.104,0.302-4.11,1.077-6.165,1.598c-15.728,4.584-31.141,10.604-45.218,19.052c-0.604,2.891-0.292,5.88-0.309,8.817c0.08,4.988,0.309,9.977,0.441,14.969c0.325,3.298,0.239,6.643,0.772,9.924c1.71,13.888,4.882,27.634,9.894,40.713c3.606,9.526,8.462,18.512,13.477,27.355c5.811,10.09,12.301,19.802,19.653,28.837c3.142-1.379,5.896-3.457,8.753-5.327c10.614-7.173,20.488-15.403,29.709-24.28c13.146-12.274,24.449-26.474,33.743-41.857c4.491-7.617,8.525-15.496,12.503-23.388c0.238,0.116,0.723,0.352,0.965,0.471c6.957,2.261,13.895,4.587,20.849,6.868c2.643,0.948,5.386,1.644,7.979,2.714c5.947,9.53,11.808,19.119,17.832,28.596c-0.885-0.007-1.698-0.352-2.514-0.643c-9.924-3.275-19.858-6.527-29.774-9.818c-0.591-0.188-1.197-0.484-1.827-0.368c-3.032,5.383-6.191,10.709-9.748,15.768c-4.266,5.907-8.439,11.893-13.109,17.495c-16.381,18.986-35.4,35.778-56.67,49.103c-6.818,4.146-13.809,8.177-21.436,10.646c-4.587-4.25-8.479-9.185-12.085-14.269c-8.426-12.006-16.016-24.611-22.503-37.767c-7.335-15.016-13.132-30.869-16.222-47.32c-2.118-11.366-3.146-22.911-3.855-34.436c-0.212-5.556-0.007-11.11,0.474-16.639c0.361-4.207,0.364-8.469,1.342-12.599c0.242-1.187,1.2-2.058,2.151-2.721c13.381-9.437,28.224-16.64,43.508-22.423c14.263-5.287,29.215-8.599,44.303-10.368C112.35,33.375,115.793,32.915,119.267,32.769z"/>
+          </g>
+        </svg>
+        <div class="hero-title">C64 Saver V2.4<br>Build Guide</div>
+        <div class="hero-subtitle">Protect your Commodore 64 from power supply failure</div>
+        <span class="hero-pill">Circuit Design by @bwack</span>
+      </div>
+      <div class="hero-img">
+        <img src="img/Fully_assembled_C64_Saver__v2_4__Plugged_In.jpg" alt="Completed C64 Saver plugged in and running">
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 1 — INTRODUCTION
+    ══════════════════════════════════════════════════════════ -->
+    <section id="intro">
+      <div class="section-header">
+        <div class="section-icon">&#128268;</div>
+        <h2>Introduction</h2>
+      </div>
+
+      <p>The original Commodore 64 power supply — that iconic black "brick" with the C= logo — is one of the most notorious failure points in the entire C64 ecosystem. After decades of use, the internal 5VDC voltage regulator can fail <strong>catastrophically</strong>, sending an uncontrolled surge of voltage directly into your C64's sensitive RAM chips and integrated circuits. The result is permanent, often irreparable damage to a machine that may have survived 40+ years.</p>
+
+      <div class="img-block">
+        <img src="img/c64-psu-uscan-euro-divider-16-9.png" alt="Original Commodore 64 power supplies — US/Canada brick (left) and European wedge (right)">
+        <div class="img-caption">The original C64 power supplies: the "brick" (US/Canada, left) and the "wedge" (Europe, right). Both are prone to the same age-related 5VDC regulator failure that the C64 Saver protects against.</div>
+      </div>
+
+      <p>Enter the <strong>C64 Saver</strong>, a circuit designed by electronics expert <strong>@bwack</strong>. This compact inline protection device monitors the 5VDC rail and <em>instantly</em> disconnects power to your C64 the moment voltage rises above a safe threshold. It installs completely transparently — sitting between your power supply and your Commodore 64 — and during normal operation you'll never know it's there. Until the day it saves your machine.</p>
+
+      <p>This guide walks you through assembling version 2.4 of bwack's C64 Saver PCB, wiring it to a pair of DIN connectors, and housing it in a Hammond 1551G enclosure. The finished device is small, professional-looking, and could save your C64 from an otherwise fatal power supply failure.</p>
+
+      <div class="img-row">
+        <div class="img-block">
+          <img src="img/20191013_211046.jpg" alt="Completed C64 Saver with green LED lit">
+          <div class="img-caption">The completed C64 Saver in a white Hammond enclosure. The green LED (optional) confirms 5VDC is present and within safe limits.</div>
+        </div>
+        <div class="img-block">
+          <img src="img/20201019_193125.jpg" alt="Two completed C64 Savers — white and black">
+          <div class="img-caption">Two completed units — white and black Hammond 1551G enclosures. Both include male and female DIN connector pigtails for inline installation.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 2 — SAFETY & DISCLAIMER
+    ══════════════════════════════════════════════════════════ -->
+    <section id="safety">
+      <div class="section-header">
+        <div class="section-icon">&#9888;</div>
+        <h2>Safety &amp; Disclaimer</h2>
+      </div>
+
+      <div class="callout warning">
+        <div class="callout-icon">&#9888;&#65039;</div>
+        <div class="callout-body">
+          <div class="callout-title">Electrical Safety — Read Before You Begin</div>
+          <p>The Commodore 64 power supply operates on <strong>mains-derived voltages</strong>. The 9VAC lines carry approximately 9V AC at up to 1A — capable of delivering a shock. The 5VDC rail is lower risk but still part of a mains-connected supply chain.</p>
+          <p><strong>Always disconnect the power supply from the wall outlet before handling the device, soldering connections, or making any wiring changes.</strong> Never work on the circuit while it is powered. Verify the power is off before touching any connections.</p>
+          <p>Soldering irons operate at temperatures of 300–450°C (570–840°F). Keep the iron away from skin, cables, and flammable materials. Use a proper soldering iron stand. Allow solder joints to cool before handling the PCB.</p>
+        </div>
+      </div>
+
+      <div class="callout caution">
+        <div class="callout-icon">&#128683;</div>
+        <div class="callout-body">
+          <div class="callout-title">Wiring Error Warning</div>
+          <p>A cross-wiring error between <strong>Pin 5 (+5VDC)</strong> and <strong>Pin 6/7 (9VAC)</strong> on the DIN connector will result in <strong>immediate hardware damage to the Commodore 64</strong>. Double-check all wiring against the pinout diagram before applying power. There is no protection against a wiring error inside the Saver itself.</p>
+        </div>
+      </div>
+
+      <h3>Disclaimer</h3>
+      <p>This build guide is provided for educational and informational purposes. The C64 Saver circuit was designed by @bwack; this guide was produced by MindFlareRetro based on the designer's published documentation and build videos. MindFlareRetro assumes no liability for damage to equipment, property, or persons resulting from the construction or use of this device. Build and install at your own risk.</p>
+      <p>Always verify component values, polarities, and wiring before applying power. If you are uncertain about any step, consult an experienced builder or seek professional assistance.</p>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 3 — THEORY OF OPERATION
+    ══════════════════════════════════════════════════════════ -->
+    <section id="theory">
+      <div class="section-header">
+        <div class="section-icon">&#9881;</div>
+        <h2>Theory of Operation</h2>
+      </div>
+
+      <p>The C64 Saver uses a small number of inexpensive components to create a fast, reliable over-voltage protection circuit. Here's how it works:</p>
+
+      <div class="two-col">
+        <div>
+          <h3>Normal Operation</h3>
+          <p>When the 5VDC rail is within its normal operating range, the <strong>TL431LP precision shunt regulator (D1)</strong> monitors the voltage through a resistor divider network (R1–R6). With voltage below the trip threshold, D1 holds the 2N7000 transistor (Q1) in its <em>off</em> state.</p>
+          <p>With Q1 off, the gate of the <strong>IRFR5305 P-channel MOSFET (Q2)</strong> is pulled low, keeping Q2 in its <em>conducting</em> state. Power flows freely from J1 (input) through Q2 to J6 (output) — your C64 receives normal, clean power.</p>
+        </div>
+        <div>
+          <h3>Over-Voltage Condition</h3>
+          <p>If the PSU 5VDC rail rises above approximately 5.5–6V (due to regulator failure), D1's reference threshold is exceeded. D1 activates, driving current through Q1's gate-source junction and turning Q1 <em>on</em>.</p>
+          <p>With Q1 on, the gate of Q2 is pulled <em>high</em>, switching Q2 <em>off</em>. The 5VDC path to the C64 is instantly broken. The 9VAC lines pass directly through the device and are unaffected by this protection logic.</p>
+        </div>
+      </div>
+
+      <div class="callout note">
+        <div class="callout-icon">&#128161;</div>
+        <div class="callout-body">
+          <div class="callout-title">In Short</div>
+          <p><strong>Normal voltage</strong> → Q2 ON → C64 powered normally.<br>
+          <strong>Over-voltage</strong> → Q1 triggers → Q2 OFF → 5VDC cut → C64 protected.</p>
+          <p>The zener diodes D2 and D3 (1N5235B, 6.8V) provide additional voltage clamping for gate protection. Capacitor C1 (47µF) provides supply decoupling and noise filtering.</p>
+        </div>
+      </div>
+
+      <div class="img-block img-theory">
+        <span class="img-enlarge" onclick="openLightbox(this)">
+          <img src="img/C64Saver_render_components_values_Jumpers_new_blue_trans.png" alt="C64 Saver V2.4 PCB component layout with values and jumper positions" style="box-shadow: none; background: transparent;">
+        </span>
+        <div class="img-caption">C64 Saver V2.4 PCB component layout. Note the positions of J2 and J5 jumpers (top and bottom), and J6 OUT (top-left) and J1 IN (bottom-right) terminal blocks.</div>
+      </div>
+
+      <div class="img-block img-theory">
+        <span class="img-enlarge" onclick="openLightbox(this)">
+          <img src="resources/C64Saver_2-4_SCHEMATIC.jpg" alt="C64 Saver V2.4 Schematic">
+        </span>
+        <div class="img-caption">C64 Saver V2.4 schematic diagram.</div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 4 — WHAT YOU'LL NEED (Novice Only)
+    ══════════════════════════════════════════════════════════ -->
+    <section id="tools" class="novice-only">
+      <div class="section-header">
+        <div class="section-icon">&#128295;</div>
+        <h2>What You'll Need</h2>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">&#128276;</div>
+        <div class="callout-body">
+          <div class="callout-title">Novice Note</div>
+          <p>If this is your first time building an electronics kit, welcome! The C64 Saver is a great first project. It has a small number of components, and while one of them (the IRFR5305 MOSFET) is SMD (surface-mount), it's in a large and forgiving DPAK package. You've got this — and this guide will walk you through every step.</p>
+        </div>
+      </div>
+
+      <h3>Tools Required</h3>
+      <ul>
+        <li><strong>Temperature-controlled soldering iron</strong> — A station with adjustable temperature is strongly recommended. Set to approximately 320–360°C for lead-free solder or 300–330°C for leaded solder. A fine conical or small chisel tip is ideal.</li>
+        <li><strong>Solder</strong> — 0.6mm or 0.8mm diameter. 60/40 lead-tin solder is easiest to work with for beginners; SAC305 lead-free solder works well at slightly higher temps.</li>
+        <li><strong>Flux</strong> — Rosin-core paste or liquid flux will make soldering the SMD MOSFET significantly easier. No-clean flux is convenient.</li>
+        <li><strong>Flush-cut diagonal cutters (dikes)</strong> — For trimming component leads after soldering.</li>
+        <li><strong>Needle-nose pliers</strong> — For bending and positioning component leads.</li>
+        <li><strong>Wire stripper</strong> — For preparing wires to connect to the DIN connectors and PCB terminal blocks.</li>
+        <li><strong>Digital multimeter</strong> — For continuity testing jumpers and verifying voltage before plugging into your C64.</li>
+        <li><strong>Helping hands / PCB holder</strong> — Highly recommended for holding the PCB steady while soldering.</li>
+        <li><strong>Solder wick or solder sucker (desoldering braid/pump)</strong> — For correcting mistakes.</li>
+        <li><strong>Magnifying glass or loupe</strong> — Useful for inspecting solder joints, especially the SMD component.</li>
+        <li><strong>Small flat file or fine sandpaper (220–400 grit)</strong> — For preparing DIN connector pins before soldering (see Pro Tip in Step 7).</li>
+        <li><strong>Safety glasses</strong> — Solder can sometimes spit. Protect your eyes.</li>
+      </ul>
+
+      <h3>Optional but Helpful</h3>
+      <ul>
+        <li><strong>Magnifying work lamp</strong> — For better visibility when placing and inspecting small components.</li>
+        <li><strong>Brass tip cleaner or wet sponge</strong> — Keep your iron tip clean throughout the build.</li>
+        <li><strong>Isopropyl alcohol (90%+) and a soft brush</strong> — For cleaning flux residue after soldering.</li>
+        <li><strong>Heat shrink tubing</strong> — For insulating wire connections inside the enclosure.</li>
+        <li><strong>Small Phillips screwdriver</strong> — For the Hammond enclosure lid screws.</li>
+      </ul>
+
+      <h3>Soldering Resources</h3>
+      <p>If you're new to soldering, these resources will help you get up to speed before you start:</p>
+      <ul>
+        <li><a href="https://learn.adafruit.com/adafruit-guide-excellent-soldering" target="_blank" rel="noopener">Adafruit Guide to Excellent Soldering</a> — A comprehensive, well-illustrated guide for beginners.</li>
+        <li><a href="https://www.ifixit.com/Guide/How+to+Solder+and+Desolder+Connections/750" target="_blank" rel="noopener">iFixit: How to Solder and Desolder</a> — Step-by-step with photos.</li>
+      </ul>
+      <p>For SMD soldering specifically, consider purchasing a <strong>practice kit</strong> from <a href="https://www.amazon.ca/s?k=smd+soldering+practice+kit" target="_blank" rel="noopener">Amazon.ca</a>, <a href="https://www.amazon.com/s?k=smd+soldering+practice+kit" target="_blank" rel="noopener">Amazon.com</a>, or <a href="https://www.aliexpress.com/w/wholesale-smd-soldering-practice-kit.html" target="_blank" rel="noopener">AliExpress</a> before tackling the Q2 MOSFET step. Even an hour of practice goes a long way.</p>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 5 — BILL OF MATERIALS
+    ══════════════════════════════════════════════════════════ -->
+    <section id="bom">
+      <div class="section-header">
+        <div class="section-icon">&#128203;</div>
+        <h2>Bill of Materials</h2>
+      </div>
+
+      <p>The following components are required to build the C64 Saver V2.4 PCB. Purchase links are provided for DigiKey Canada (.ca) and DigiKey USA (.com). All links have been verified at time of publication.</p>
+
+      <div class="callout note">
+        <div class="callout-icon">&#128204;</div>
+        <div class="callout-body">
+          <div class="callout-title">Additional Parts Required (Not in PCB BOM)</div>
+          <p>The PCB BOM below covers only the components that mount to the PCB. You will also need:</p>
+          <ul>
+            <li><strong>1× Female 7-pin 270° DIN connector</strong> with short cable (PSU input side → J1 IN)</li>
+            <li><strong>1× Male 7-pin 270° DIN connector</strong> with short cable (C64 output side → J6 OUT)</li>
+            <li><strong>Hookup wire</strong> — 4 conductors, ideally colour-coded (red, black, and 2× a third colour for 9VAC)</li>
+            <li><strong>Hammond 1551G enclosure</strong> — grey, black, or translucent blue (listed below)</li>
+            <li><em>Optional:</em> 3mm green LED + 330Ω resistor (for power indicator)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bom-table-wrap">
+        <table class="bom-table">
+          <thead>
+            <tr>
+              <th>Ref</th>
+              <th>Component</th>
+              <th>Value / Part</th>
+              <th>Qty</th>
+              <th>Mfr Part #</th>
+              <th>DigiKey CA</th>
+              <th>DigiKey US</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="bom-section-header"><td colspan="7">Resistors — 0.25W, 1% Tolerance, Axial Through-Hole</td></tr>
+            <tr>
+              <td class="ref">R1, R6</td>
+              <td>Metal Film Resistor</td>
+              <td>3.9 k&#8486;</td>
+              <td>2</td>
+              <td class="pn">RNMF14FTC3K90</td>
+              <td class="bom-links"><a href="https://www.digikey.ca/short/ph4t79" target="_blank" rel="noopener" class="lnk-ca">DigiKey CA</a></td>
+              <td class="bom-links"><a href="https://www.digikey.com/en/products/detail/stackpole-electronics-inc/RNMF14FTC3K90/2617344" target="_blank" rel="noopener" class="lnk-us">DigiKey US</a></td>
+            </tr>
+            <tr>
+              <td class="ref">R2, R3, R5</td>
+              <td>Metal Film Resistor</td>
+              <td>3.3 k&#8486;</td>
+              <td>3</td>
+              <td class="pn">RNMF14FTC3K30</td>
+              <td class="bom-links"><a href="https://www.digikey.ca/short/ph4tzz" target="_blank" rel="noopener" class="lnk-ca">DigiKey CA</a></td>
+              <td class="bom-links"><a href="https://www.digikey.com/en/products/detail/stackpole-electronics-inc/RNMF14FTC3K30/2617498" target="_blank" rel="noopener" class="lnk-us">DigiKey US</a></td>
+            </tr>
+            <tr>
+              <td class="ref">R4</td>
+              <td>Metal Film Resistor</td>
+              <td>330 k&#8486; <span class="badge badge-blue" title="Suitable alternates: 300k or 360k at 5% tolerance">note</span></td>
+              <td>1</td>
+              <td class="pn">RNMF14FTC330K</td>
+              <td class="bom-links"><a href="https://www.digikey.ca/short/ph4tbp" target="_blank" rel="noopener" class="lnk-ca">DigiKey CA</a></td>
+              <td class="bom-links"><a href="https://www.digikey.com/en/products/detail/stackpole-electronics-inc/RNMF14FTC330K/2617487" target="_blank" rel="noopener" class="lnk-us">DigiKey US</a></td>
+            </tr>
+            <tr>
+              <td class="ref">R7</td>
+              <td>Metal Film Resistor</td>
+              <td>33 k&#8486;</td>
+              <td>1</td>
+              <td class="pn">RNMF14FTC33K0</td>
+              <td class="bom-links"><a href="https://www.digikey.ca/short/ph4t41" target="_blank" rel="noopener" class="lnk-ca">DigiKey CA</a></td>
+              <td class="bom-links"><a href="https://www.digikey.com/en/products/filter?keywords=RNMF14FTC33K0" target="_blank" rel="noopener" class="lnk-us">DigiKey US</a></td>
+            </tr>
+            <tr>
+              <td class="ref">R8</td>
+              <td>Metal Film Resistor</td>
+              <td>82 k&#8486;</td>
+              <td>1</td>
+              <td class="pn">RNMF14FTC82K0</td>
+              <td class="bom-links"><a href="https://www.digikey.ca/short/ph4tmf" target="_blank" rel="noopener" class="lnk-ca">DigiKey CA</a></td>
+              <td class="bom-links"><a href="https://www.digikey.com/en/products/filter?keywords=RNMF14FTC82K0" target="_blank" rel="noopener" class="lnk-us">DigiKey US</a></td>
+            </tr>
+
+            <tr class="bom-section-header"><td colspan="7">Capacitor — Electrolytic, Radial Through-Hole, 6.3×5mm</td></tr>
+            <tr>
+              <td class="ref">C1</td>
+              <td>Electrolytic Capacitor</td>
+              <td>47 µF / 25V</td>
+              <td>1</td>
+              <td class="pn">25ML47MEFC6.3X5</td>
+              <td class="bom-links"><a href="https://www.digikey.ca/short/ph4718" target="_blank" rel="noopener" class="lnk-ca">DigiKey CA</a></td>
+              <td class="bom-links"><a href="https://www.digikey.com/en/products/detail/rubycon/25ML47MEFC6-3X5/3562976" target="_blank" rel="noopener" class="lnk-us">DigiKey US</a></td>
+            </tr>
+
+            <tr class="bom-section-header"><td colspan="7">Diodes</td></tr>
+            <tr>
+              <td class="ref">D1</td>
+              <td>Shunt Voltage Reference (TO-92)</td>
+              <td>TL431LP</td>
+              <td>1</td>
+              <td class="pn">TL431BILPG</td>
+              <td class="bom-links"><a href="https://www.digikey.ca/short/ph4tvb" target="_blank" rel="noopener" class="lnk-ca">DigiKey CA</a></td>
+              <td class="bom-links"><a href="https://www.digikey.com/en/products/filter?keywords=TL431BILPG" target="_blank" rel="noopener" class="lnk-us">DigiKey US</a></td>
+            </tr>
+            <tr>
+              <td class="ref">D2, D3</td>
+              <td>Zener Diode (DO-35, Axial)</td>
+              <td>6.8V / 500mW</td>
+              <td>2</td>
+              <td class="pn">1N5235B-TR</td>
+              <td class="bom-links"><a href="https://www.digikey.ca/short/ph43qv" target="_blank" rel="noopener" class="lnk-ca">DigiKey CA</a></td>
+              <td class="bom-links"><a href="https://www.digikey.com/en/products/detail/vishay-general-semiconductor-diodes-division/1N5235B-TR/3104105" target="_blank" rel="noopener" class="lnk-us">DigiKey US</a></td>
+            </tr>
+
+            <tr class="bom-section-header"><td colspan="7">Transistors</td></tr>
+            <tr>
+              <td class="ref">Q1</td>
+              <td>N-Channel MOSFET (TO-92)</td>
+              <td>2N7000</td>
+              <td>1</td>
+              <td class="pn">2N7000-D26Z</td>
+              <td class="bom-links"><a href="https://www.digikey.ca/short/ph43mr" target="_blank" rel="noopener" class="lnk-ca">DigiKey CA</a></td>
+              <td class="bom-links"><a href="https://www.digikey.com/en/products/detail/onsemi/2N7000-D26Z/973964" target="_blank" rel="noopener" class="lnk-us">DigiKey US</a></td>
+            </tr>
+            <tr>
+              <td class="ref">Q2</td>
+              <td>P-Channel MOSFET <strong>(SMD DPAK)</strong> <span class="badge badge-warn">SMD</span></td>
+              <td>IRFR5305</td>
+              <td>1</td>
+              <td class="pn">IRFR5305TRPBF</td>
+              <td class="bom-links"><a href="https://www.digikey.ca/short/ph432z" target="_blank" rel="noopener" class="lnk-ca">DigiKey CA</a></td>
+              <td class="bom-links"><a href="https://www.digikey.com/en/products/detail/infineon-technologies/IRFR5305TRPBF/811407" target="_blank" rel="noopener" class="lnk-us">DigiKey US</a></td>
+            </tr>
+
+            <tr class="bom-section-header"><td colspan="7">Enclosure — Hammond 1551G (choose one)</td></tr>
+            <tr>
+              <td class="ref">—</td>
+              <td>Hammond 1551G Enclosure</td>
+              <td>Grey (1551GGY)</td>
+              <td>1</td>
+              <td class="pn">1551GGY</td>
+              <td class="bom-links"><a href="https://www.digikey.ca/en/products/detail/hammond-manufacturing/1551GGY/284764" target="_blank" rel="noopener" class="lnk-ca">DigiKey CA</a></td>
+              <td class="bom-links"><a href="https://www.digikey.com/en/products/detail/hammond-manufacturing/1551GGY/284764" target="_blank" rel="noopener" class="lnk-us">DigiKey US</a></td>
+            </tr>
+            <tr>
+              <td class="ref">—</td>
+              <td>Hammond 1551G Enclosure</td>
+              <td>Black (1551GBK)</td>
+              <td>1</td>
+              <td class="pn">1551GBK</td>
+              <td class="bom-links"><a href="https://www.digikey.ca/en/products/detail/hammond-manufacturing/1551GBK/284761" target="_blank" rel="noopener" class="lnk-ca">DigiKey CA</a></td>
+              <td class="bom-links"><a href="https://www.digikey.com/en/products/detail/hammond-manufacturing/1551GBK/284761" target="_blank" rel="noopener" class="lnk-us">DigiKey US</a></td>
+            </tr>
+            <tr>
+              <td class="ref">—</td>
+              <td>Hammond 1551G Enclosure</td>
+              <td>Translucent Blue (1551GTBU)</td>
+              <td>1</td>
+              <td class="pn">1551GTBU</td>
+              <td class="bom-links"><a href="https://www.digikey.ca/en/products/detail/hammond-manufacturing/1551GTBU/2094878" target="_blank" rel="noopener" class="lnk-ca">DigiKey CA</a></td>
+              <td class="bom-links"><a href="https://www.digikey.com/en/products/detail/hammond-manufacturing/1551GTBU/2094878" target="_blank" rel="noopener" class="lnk-us">DigiKey US</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="display:flex; gap:1rem; margin-top:1.25rem; flex-wrap:wrap;">
+        <div style="flex:1 1 45%; min-width:240px; text-align:center;">
+          <img src="img/Hammond_1551GGY_BK.jpg" alt="Hammond 1551G enclosures in grey and black" style="width:100%; height:auto; border-radius:var(--radius); box-shadow:var(--shadow);">
+          <div class="img-caption" style="display:block;">Hammond 1551G in grey and black ABS.</div>
+        </div>
+        <div style="flex:1 1 45%; min-width:240px; text-align:center;">
+          <img src="img/C64 Saver V2.4 3D Printed Case by @leelegionsmith.jpg" alt="3D printed C64 Saver enclosure" style="width:100%; height:auto; border-radius:var(--radius); box-shadow:var(--shadow);">
+          <div class="img-caption" style="display:block;">Alternative: 3D-printed enclosure by @leelegionsmith.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 6 — VIDEO SERIES
+    ══════════════════════════════════════════════════════════ -->
+    <section id="videos">
+      <div class="section-header">
+        <div class="section-icon">&#127910;</div>
+        <h2>MindFlareRetro Video Series</h2>
+      </div>
+
+      <p>The C64 Saver build is documented in a 3-part video series on the <a href="https://www.youtube.com/@MindFlareRetro" target="_blank" rel="noopener">MindFlareRetro YouTube channel</a>. Watching the videos before you begin — or keeping them open in a second window — is highly recommended alongside this written guide.</p>
+
+      <div class="callout tip">
+        <div class="callout-icon">&#128250;</div>
+        <div class="callout-body">
+          <div class="callout-title">Pro Tip</div>
+          <p>Watch all three videos in full before picking up your soldering iron. Getting the complete picture of the build process will make each individual step much clearer when you get to it.</p>
+        </div>
+      </div>
+
+      <div class="video-grid">
+        <div class="video-card">
+          <div class="video-label">Part 1 — Introduction &amp; Overview</div>
+          <div class="yt-wrap">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/CvyzHWqGK3M?si=vJeK-wzu7Wt8027m" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+        </div>
+        <div class="video-card">
+          <div class="video-label">Part 2 — PCB Assembly</div>
+          <div class="yt-wrap">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/SQ428F6jctY?si=F8hxrWhPE-QfuY_3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+        </div>
+        <div class="video-card">
+          <div class="video-label">Part 3 — Wiring &amp; Final Assembly</div>
+          <div class="yt-wrap">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/cU3_QdBvOsA?si=jGt0D2ugrtzw7f9G" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 7 — STEP-BY-STEP BUILD
+    ══════════════════════════════════════════════════════════ -->
+    <section id="build">
+      <div class="section-header">
+        <div class="section-icon">&#128295;</div>
+        <h2>Step-by-Step Build</h2>
+      </div>
+
+      <p class="novice-only">Work through the steps below in order. General soldering best practices: tin your iron tip before each joint, apply a small amount of flux, heat the pad and lead together before flowing solder, and allow each joint to cool naturally. Inspect each joint before moving to the next step.</p>
+
+      <div class="callout caution">
+        <div class="callout-icon">&#9888;&#65039;</div>
+        <div class="callout-body">
+          <div class="callout-title">Before You Begin</div>
+          <p>Keep the PCB component layout image (shown in Theory of Operation, above) open for reference throughout assembly. Always confirm component values and orientations against both this guide and the PCB silkscreen before soldering.</p>
+        </div>
+      </div>
+
+      <!-- ── Reading Resistors (Novice Only) ─────────────────────── -->
+      <div id="step-resistors-read" class="novice-only">
+        <h3>Reading Resistor Values</h3>
+        <p>The resistors in this kit are 1% tolerance <strong>5-band</strong> metal film resistors. The first three bands give the first three digits, the fourth band is the multiplier, and the fifth band indicates tolerance (brown = 1%).</p>
+
+        <table class="rcc-table">
+          <thead>
+            <tr>
+              <th>Ref</th>
+              <th>Value</th>
+              <th>Band 1</th>
+              <th>Band 2</th>
+              <th>Band 3</th>
+              <th>Band 4 (×)</th>
+              <th>Band 5 (Tol.)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="ref">R1, R6</td>
+              <td><strong>3.9 k&#8486;</strong></td>
+              <td><span class="color-swatch" style="background:#ff8000;"></span>Orange (3)</td>
+              <td><span class="color-swatch" style="background:#ffffff;border:1px solid #ccc;"></span>White (9)</td>
+              <td><span class="color-swatch" style="background:#111111;"></span>Black (0)</td>
+              <td><span class="color-swatch" style="background:#8b4513;"></span>Brown (×10)</td>
+              <td><span class="color-swatch" style="background:#8b4513;"></span>Brown (1%)</td>
+            </tr>
+            <tr>
+              <td class="ref">R2, R3, R5</td>
+              <td><strong>3.3 k&#8486;</strong></td>
+              <td><span class="color-swatch" style="background:#ff8000;"></span>Orange (3)</td>
+              <td><span class="color-swatch" style="background:#ff8000;"></span>Orange (3)</td>
+              <td><span class="color-swatch" style="background:#111111;"></span>Black (0)</td>
+              <td><span class="color-swatch" style="background:#8b4513;"></span>Brown (×10)</td>
+              <td><span class="color-swatch" style="background:#8b4513;"></span>Brown (1%)</td>
+            </tr>
+            <tr>
+              <td class="ref">R4</td>
+              <td><strong>330 k&#8486;</strong></td>
+              <td><span class="color-swatch" style="background:#ff8000;"></span>Orange (3)</td>
+              <td><span class="color-swatch" style="background:#ff8000;"></span>Orange (3)</td>
+              <td><span class="color-swatch" style="background:#111111;"></span>Black (0)</td>
+              <td><span class="color-swatch" style="background:#ff8000;"></span>Orange (×1k)</td>
+              <td><span class="color-swatch" style="background:#8b4513;"></span>Brown (1%)</td>
+            </tr>
+            <tr>
+              <td class="ref">R7</td>
+              <td><strong>33 k&#8486;</strong></td>
+              <td><span class="color-swatch" style="background:#ff8000;"></span>Orange (3)</td>
+              <td><span class="color-swatch" style="background:#ff8000;"></span>Orange (3)</td>
+              <td><span class="color-swatch" style="background:#111111;"></span>Black (0)</td>
+              <td><span class="color-swatch" style="background:#ff0000;"></span>Red (×100)</td>
+              <td><span class="color-swatch" style="background:#8b4513;"></span>Brown (1%)</td>
+            </tr>
+            <tr>
+              <td class="ref">R8</td>
+              <td><strong>82 k&#8486;</strong></td>
+              <td><span class="color-swatch" style="background:#888888;"></span>Gray (8)</td>
+              <td><span class="color-swatch" style="background:#ff0000;"></span>Red (2)</td>
+              <td><span class="color-swatch" style="background:#111111;"></span>Black (0)</td>
+              <td><span class="color-swatch" style="background:#ff0000;"></span>Red (×100)</td>
+              <td><span class="color-swatch" style="background:#8b4513;"></span>Brown (1%)</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="font-size:.85rem;color:var(--color-muted);margin-top:.25rem;">Tip: Always confirm values with a multimeter on the resistance (&#8486;) setting <em>before</em> soldering. It's much harder to remove an incorrect resistor after the fact.</p>
+      </div>
+
+      <!-- ── STEP 1: Resistors ─────────────────────────────────── -->
+      <div class="step-block" id="step-1">
+        <div class="step-header">
+          <span class="step-number">Step 1</span>
+          <span class="step-title-text">Solder the Resistors (R1–R8)</span>
+        </div>
+        <div class="step-body">
+          <p>Resistors are the easiest components to start with, and soldering them first keeps the PCB clean and uncluttered for subsequent steps.</p>
+
+          <div class="callout note novice-only">
+            <div class="callout-icon">&#8505;&#65039;</div>
+            <div class="callout-body">
+              <div class="callout-title">Orientation</div>
+              <p>Resistors are non-polarized — they work correctly in either orientation. However, installing them all in the same direction (e.g., lowest band to the left) makes future troubleshooting easier and looks more professional.</p>
+            </div>
+          </div>
+
+          <ol>
+            <li>Using the PCB layout diagram as a reference, identify the correct footprint on the PCB for each resistor value. The PCB silkscreen labels each position (R1–R8).</li>
+            <li>Bend the leads of each resistor down to match the footprint hole spacing. For the standard 1/4W axial package, the holes are spaced approximately 10mm apart.</li>
+            <li>Insert the resistor through the PCB from the top (component side). The flat, component side is the side with the white silkscreen text. The resistor body sits flat against the board.</li>
+            <li>Fold the leads slightly outward on the solder side to hold the resistor in place while you solder.</li>
+            <li>Solder each lead: touch the iron to both the pad and the lead simultaneously for 2–3 seconds, then flow a small amount of solder. A good joint is shiny, concave, and volcano-shaped.</li>
+            <li>Trim the excess leads flush with the PCB using your diagonal cutters.</li>
+            <li>Repeat for all 8 resistors (R1 through R8).</li>
+          </ol>
+
+          <div class="callout warning">
+            <div class="callout-icon">&#9888;&#65039;</div>
+            <div class="callout-body">
+              <div class="callout-title">Double-Check Your Positions</div>
+              <p>Installing a resistor in the wrong position is the most common mistake. The values are similar (3.9k vs 3.3k vs 33k) and easy to confuse. Before soldering <em>each</em> resistor, confirm the value against the silkscreen label and the BOM.</p>
+              <p>In particular: <strong>R4 (330k&#8486;)</strong> is the outlier — over 80× the value of R2/R3/R5. Installing it in the wrong position will affect the trip-point voltage.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STEP 2: Jumpers ───────────────────────────────────── -->
+      <div class="step-block" id="step-2">
+        <div class="step-header">
+          <span class="step-number">Step 2</span>
+          <span class="step-title-text">Install Jumpers at J2 and J5</span>
+        </div>
+        <div class="step-body">
+          <div class="callout warning">
+            <div class="callout-icon">&#9888;&#65039;</div>
+            <div class="callout-body">
+              <div class="callout-title">Critical Step — Do Not Skip</div>
+              <p>The C64 Saver V2.4 PCB is designed to optionally support an add-on board. Without that board installed, <strong>two jumpers must be bridged</strong> for the protection circuit to function. If these jumpers are missing, <strong>no power will pass to the output terminal</strong> — your C64 will not turn on.</p>
+            </div>
+          </div>
+
+          <p>Jumpers are short bridges across two adjacent pads. You can make them using a short length of trimmed resistor lead wire, or a standard 2.54mm male pin header with a jumper cap.</p>
+
+          <ol>
+            <li>Locate <strong>J2</strong> on the PCB — it is in the horizontal header row near the <em>top</em> of the board, marked by a white silk-screen box.</li>
+            <li>Bridge the two pins at J2 specifically marked by the J2 label. Solder a short wire across both pads (or install a 2-pin header and jumper cap).</li>
+            <li>Locate <strong>J5</strong> on the PCB — it is in the horizontal header row near the <em>bottom</em> of the board, also marked by a white silk-screen box.</li>
+            <li>Bridge the two pins at J5 in the same manner.</li>
+            <li>After soldering, use a multimeter set to continuity mode and verify that there is continuity (beep) across each jumper pair.</li>
+          </ol>
+
+          <div class="callout tip">
+            <div class="callout-icon">&#128161;</div>
+            <div class="callout-body">
+              <div class="callout-title">Jumper Wire from Clippings</div>
+              <p>Save the trimmed resistor leads from Step 1 — they're the perfect material for making jumper bridges. Bend a short length into a U-shape to bridge the pads cleanly.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: Capacitor ─────────────────────────────────── -->
+      <div class="step-block" id="step-3">
+        <div class="step-header">
+          <span class="step-number">Step 3</span>
+          <span class="step-title-text">Solder the Capacitor (C1 — 47µF 25V)</span>
+        </div>
+        <div class="step-body">
+          <div class="callout warning">
+            <div class="callout-icon">&#9888;&#65039;</div>
+            <div class="callout-body">
+              <div class="callout-title">Polarity — Install Correctly</div>
+              <p>Electrolytic capacitors are <strong>polarized</strong>. Installing C1 backwards can damage the capacitor and potentially cause it to vent or fail. Verify orientation before soldering.</p>
+              <ul class="novice-only">
+                <li>The <strong>negative (−) lead</strong> is the <em>shorter</em> lead, and is marked by a stripe on the capacitor body (usually white or grey with "−" symbols).</li>
+                <li>The <strong>positive (+) lead</strong> is the <em>longer</em> lead.</li>
+                <li>The PCB silkscreen shows a "+" symbol or a filled half-circle for the positive hole. Match this to the longer lead.</li>
+              </ul>
+            </div>
+          </div>
+
+          <ol>
+            <li>Identify C1 on the PCB (to the right-centre of the board).</li>
+            <li>Insert C1 with the correct polarity — longer (+) lead into the "+" hole.</li>
+            <li>The capacitor body should sit flat and close to the PCB, fitting within the 6.3mm diameter footprint.</li>
+            <li>Solder both leads from the back of the board. Trim leads flush.</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- ── STEP 4: Diodes ────────────────────────────────────── -->
+      <div class="step-block" id="step-4">
+        <div class="step-header">
+          <span class="step-number">Step 4</span>
+          <span class="step-title-text">Solder the Diodes (D1, D2, D3)</span>
+        </div>
+        <div class="step-body">
+          <div class="callout warning novice-only">
+            <div class="callout-icon">&#9888;&#65039;</div>
+            <div class="callout-body">
+              <div class="callout-title">Polarity — Cathode Band</div>
+              <p>All three diode-type components in this step are polarized. <strong>The cathode (−) end is marked by a painted band</strong> near one end of the body. Match this band to the band symbol shown on the PCB silkscreen.</p>
+            </div>
+          </div>
+
+          <h4>D1 — TL431LP Shunt Voltage Reference (TO-92 Package)</h4>
+          <p>The TL431 looks like a small transistor in a TO-92 (flat-sided) package. It has three leads: Anode (A), Cathode (K), and Reference (R). The PCB silkscreen and the TL431 datasheet show which lead goes where — match the flat side of the package to the flat side shown on the silkscreen.</p>
+
+          <h4>D2 &amp; D3 — 1N5235B Zener Diodes (DO-35, Axial)</h4>
+          <p>These are small glass-body axial diodes. Like standard diodes, the <strong>cathode band</strong> (a painted ring near one end) must match the band line on the PCB silkscreen. Install D2 and D3 in their marked positions on the bottom-left area of the PCB.</p>
+
+          <ol>
+            <li>Insert D1 into the PCB in the correct orientation (match flat side of TO-92 body to silkscreen).</li>
+            <li>Insert D2 and D3 with the cathode bands aligned to the silkscreen.</li>
+            <li>Solder all leads and trim flush.</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- ── STEP 5: Q1 ────────────────────────────────────────── -->
+      <div class="step-block" id="step-5">
+        <div class="step-header">
+          <span class="step-number">Step 5</span>
+          <span class="step-title-text">Solder Q1 — 2N7000 N-Channel MOSFET (TO-92)</span>
+        </div>
+        <div class="step-body">
+          <div class="callout caution novice-only">
+            <div class="callout-icon">&#9888;&#65039;</div>
+            <div class="callout-body">
+              <div class="callout-title">Orientation Matters</div>
+              <p>The 2N7000 is in a TO-92 package (flat on one side, round on the other). The three leads are Gate (G), Source (S), and Drain (D). The PCB silkscreen shows the flat side orientation — match the flat face of Q1's body to the flat face on the silkscreen symbol.</p>
+            </div>
+          </div>
+
+          <ol>
+            <li>Locate Q1 on the PCB (centre-bottom area, to the left of D1 and C1).</li>
+            <li>Hold Q1 so the flat face matches the silkscreen orientation.</li>
+            <li>Insert the leads into the three holes, ensuring it sits flush to the PCB.</li>
+            <li>Solder all three leads and trim flush.</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- ── STEP 6: Q2 SMD MOSFET ─────────────────────────────── -->
+      <div class="step-block" id="step-6">
+        <div class="step-header">
+          <span class="step-number">Step 6</span>
+          <span class="step-title-text">Solder Q2 — IRFR5305 P-Channel MOSFET (SMD DPAK)</span>
+        </div>
+        <div class="step-body">
+          <div class="callout tip">
+            <div class="callout-icon">&#128161;</div>
+            <div class="callout-body">
+              <div class="callout-title novice-only" style="display:block;">Novice Note — Don't Be Intimidated!</div>
+              <p class="novice-only">The IRFR5305 is a surface-mount component, which sounds scary if you've never done SMD soldering. But the DPAK package is one of the <em>largest and most forgiving</em> SMD packages out there. The pads are big, the component is easy to handle with tweezers, and with a little flux it's very manageable. You've got this.</p>
+              <p class="novice-only">If you'd like to practice first, an <a href="https://www.amazon.ca/s?k=smd+soldering+practice+kit" target="_blank" rel="noopener">SMD soldering practice kit</a> is a great investment — even 30 minutes of practice will make this step much easier.</p>
+              <p>The DPAK (TO-252) package has <strong>three leads at the front</strong> (Gate, Drain, Source) and a <strong>large metal tab at the rear</strong> which is also the Drain connection and acts as a heatsink.</p>
+            </div>
+          </div>
+
+          <div class="callout warning">
+            <div class="callout-icon">&#9888;&#65039;</div>
+            <div class="callout-body">
+              <div class="callout-title">Orientation is Critical</div>
+              <p>Installing Q2 backwards will prevent the circuit from functioning. The metal tab / heatsink face of the DPAK goes toward the large solder pad at the rear. The three small leads face toward the three small pads at the front. Verify against the PCB silkscreen and the image below before applying solder.</p>
+            </div>
+          </div>
+
+          <div class="img-block img-sm">
+            <img src="img/Q2-FR5305-top-GSD.jpg" alt="IRFR5305 DPAK MOSFET with Gate, Source, Drain labels">
+            <div class="img-caption">IRFR5305 DPAK MOSFET with labelled Gate (G), Source (S), Drain (D) that must be soldered to the PCB.</div>
+          </div>
+
+          <h4>Soldering Procedure</h4>
+          <ol>
+            <li>Apply a small amount of flux paste to the pads on the PCB where Q2 will sit.</li>
+            <li>Position Q2 on the pads using tweezers. The large metal tab should sit over and overlap the large rear pad; the three small leads should align with the three small front pads.</li>
+            <li><strong>Tack-solder the large tab first.</strong> Touch the iron to the large rear pad and flow solder under the tab. This anchors the component in place.</li>
+            <li>Check alignment — the small leads should still be centred on their pads. Adjust if needed while the solder is still warm.</li>
+            <li>Solder the three small front leads individually. Use a small amount of solder and work quickly — 2–3 seconds per joint.</li>
+            <li>Inspect the joint area with a magnifier. Ensure there are no solder bridges between the three small leads.</li>
+          </ol>
+
+          <div class="img-row">
+            <div class="img-block">
+              <img src="img/Soldering_Q2_MOSFET_1.jpg" alt="Soldering the Q2 MOSFET to the PCB - step 1">
+              <div class="img-caption">Positioning and tacking Q2 onto the PCB pads.</div>
+            </div>
+            <div class="img-block">
+              <img src="img/Soldering_Q2_MOSFET_2.jpg" alt="Soldering the Q2 MOSFET to the PCB - completed">
+              <div class="img-caption">All leads soldered. Inspect for bridges between the three small pads.</div>
+            </div>
+          </div>
+
+          <div class="img-block" style="margin-top:1rem;">
+            <span class="img-enlarge" onclick="openLightbox(this)">
+              <img src="img/Fully-Soldered-PCB.jpg" alt="Fully assembled C64 Saver PCB with all components soldered">
+            </span>
+            <div class="img-caption">The completed PCB with all components soldered. Compare your board to this reference image before proceeding.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STEP 7: DIN Connector Wiring ─────────────────────── -->
+      <div class="step-block" id="step-7">
+        <div class="step-header">
+          <span class="step-number">Step 7</span>
+          <span class="step-title-text">Wire the DIN Connectors</span>
+        </div>
+        <div class="step-body">
+          <p>The C64 Saver requires two 7-pin DIN connectors:</p>
+          <ul>
+            <li><strong>Female 7-pin DIN</strong> — INPUT side. This receives the male DIN plug coming from the C64 PSU cable.</li>
+            <li><strong>Male 7-pin DIN</strong> — OUTPUT side. This plugs directly into the female DIN port on the back of the Commodore 64.</li>
+          </ul>
+
+          <p>Each connector is wired the same way — same pins, same signals. Refer to the pinout diagram below. Note that the pinout is described from the <strong>front (plug/socket face) view</strong>; when you flip the connector over to solder from the rear, the pin positions are <em>mirrored</em>.</p>
+
+          <div class="callout warning">
+            <div class="callout-icon">&#9888;&#65039;</div>
+            <div class="callout-body">
+              <div class="callout-title">Verify Pin Numbers Before Soldering</div>
+              <p>DIN connector pin numbering can vary between manufacturers and the numbers are often moulded very small into the connector housing. Always locate and verify pin numbers physically on your specific connector before soldering any wire. A wiring error is permanent damage to your C64.</p>
+            </div>
+          </div>
+
+          <div class="img-block">
+            <span class="img-enlarge" onclick="openLightbox(this)">
+              <img src="img/C64_Power_Plug_DIN_Wiring_Guide.png" alt="C64 Power Plug DIN Connector Pinout Diagram">
+            </span>
+            <div class="img-caption">C64 7-pin DIN connector pinout — front (plug/socket face) view.</div>
+          </div>
+
+          <h4>Pin Assignment Reference</h4>
+          <table class="pin-table">
+            <thead>
+              <tr><th>Pin</th><th>Signal</th><th>Wire Colour</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="pin-num">2</span></td>
+                <td><strong>GND</strong></td>
+                <td><span class="wire-swatch" style="background:#111111;"></span>Black</td>
+                <td>Primary ground connection</td>
+              </tr>
+              <tr>
+                <td><span class="pin-num">5</span></td>
+                <td><strong>+5VDC</strong></td>
+                <td><span class="wire-swatch" style="background:#cc0000;"></span>Red</td>
+                <td>Protected 5V rail — critical</td>
+              </tr>
+              <tr>
+                <td><span class="pin-num">6</span></td>
+                <td><strong>9VAC</strong></td>
+                <td><span class="wire-swatch" style="background:#7a4f1a;"></span>Brown</td>
+                <td>9V AC — best practice wire colour</td>
+              </tr>
+              <tr>
+                <td><span class="pin-num">7</span></td>
+                <td><strong>9VAC</strong></td>
+                <td><span class="wire-swatch" style="background:#eeeeee;border:1px solid #ccc;"></span>White</td>
+                <td>9V AC — AC polarity interchangeable</td>
+              </tr>
+              <tr>
+                <td><span class="pin-num">1, 3, 4</span></td>
+                <td>NC / GND</td>
+                <td>—</td>
+                <td>Not connected in this build</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout tip">
+            <div class="callout-icon">&#128161;</div>
+            <div class="callout-body">
+              <div class="callout-title">Pro Tip — Sand the DIN Pins First</div>
+              <p>Lightly sand or file the surface of the DIN connector pins that you will be soldering the wires to. Roughing up the shiny electroplated surface will shorten the soldering iron dwell time required. <i>The melted solder will stick faster — "potato method" not required.</i></p>
+            </div>
+          </div>
+
+          <h4>Soldering Wires to the DIN Connectors</h4>
+          <ol>
+            <li>Cut four lengths of hookup wire — one for each signal (GND, +5V, 9VAC×2). Length depends on your enclosure layout, but approximately 80–100mm works well for the Hammond 1551G.</li>
+            <li>Strip approximately 4mm of insulation from each wire end.</li>
+            <li>Tin the wire ends and the DIN connector pins with a small amount of solder.</li>
+            <li>Working from the solder side (rear) of the connector, solder each wire to its correct pin. Use the reference table above.</li>
+            <li>Keep each joint neat — excess solder can bridge adjacent pins and cause catastrophic shorts. Inspect carefully with a magnifier or loupe.</li>
+            <li>Repeat for both the female (input) and male (output) connectors. The wiring is identical on both.</li>
+          </ol>
+
+          <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+            <div class="img-block img-sm" style="display:block; flex:1; min-width:200px;">
+              <span class="img-enlarge" onclick="openLightbox(this)">
+                <img src="img/Soldered Male DIN.jpg" alt="Soldered male DIN connector - solder side view showing wired pins">
+              </span>
+              <div class="img-caption" style="display:block;">Rear (solder side) view of the wired male DIN connector (output to C64).</div>
+            </div>
+            <div class="img-block img-sm" style="display:block; flex:1; min-width:200px;">
+              <span class="img-enlarge" onclick="openLightbox(this)">
+                <img src="img/Soldered Female DIN.jpg" alt="Soldered female DIN connector - solder side view showing wired pins">
+              </span>
+              <div class="img-caption" style="display:block;">Rear (solder side) view of the wired female DIN connector (input from PSU).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STEP 8: PCB Terminal Connections ─────────────────── -->
+      <div class="step-block" id="step-8">
+        <div class="step-header">
+          <span class="step-number">Step 8</span>
+          <span class="step-title-text">Connect Wires to PCB Terminal Blocks (J1 IN / J6 OUT)</span>
+        </div>
+        <div class="step-body">
+          <p>The PCB has two 3-position screw terminal blocks: <strong>J1 (IN)</strong> at the bottom-right and <strong>J6 (OUT)</strong> at the top-left. Each has positions for 5V, GND, and 9VAC.</p>
+
+          <div class="callout caution">
+            <div class="callout-icon">&#9888;&#65039;</div>
+            <div class="callout-body">
+              <div class="callout-title">Do Not Mix Up J1 and J6</div>
+              <p>The wires from the <strong>female DIN connector</strong> (receives the PSU) connect to <strong>J1 (IN)</strong> at the bottom-right of the PCB.<br>
+              The wires from the <strong>male DIN connector</strong> (plugs into C64) connect to <strong>J6 (OUT)</strong> at the top-left of the PCB.<br>
+              Reversing these will prevent the protection circuit from operating correctly.</p>
+            </div>
+          </div>
+
+          <table class="pin-table">
+            <thead>
+              <tr><th>PCB Terminal</th><th>Location</th><th>Connects To</th><th>Signal</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>J1 — IN</strong></td>
+                <td>Bottom-right</td>
+                <td>Female DIN (from PSU)</td>
+                <td>5V, GND, 9VAC</td>
+              </tr>
+              <tr>
+                <td><strong>J6 — OUT</strong></td>
+                <td>Top-left</td>
+                <td>Male DIN (to C64)</td>
+                <td>5V, GND, 9VAC</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <ol>
+            <li>Loosen the screws on the J1 terminal block.</li>
+            <li>Insert the wires from the female DIN connector into the appropriate J1 terminals: red (+5V) → J1-5V, black (GND) → J1-GND, brown &amp; white (9VAC) → J1-9VAC.</li>
+            <li>Tighten the terminal block screws firmly. Tug each wire gently to confirm it is secure.</li>
+            <li>Repeat for J6 using the wires from the male DIN connector.</li>
+          </ol>
+
+          <div class="img-block">
+            <span class="img-enlarge" onclick="openLightbox(this)">
+              <img src="img/AssembledSaver-LidOpen.jpg" alt="Open C64 Saver enclosure showing PCB wiring and DIN connectors">
+            </span>
+            <div class="img-caption">Inside view: female DIN (input side, right) and male DIN (output side, left) wired to PCB terminal blocks.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STEP 9: Final Assembly ─────────────────────────────── -->
+      <div class="step-block" id="step-9">
+        <div class="step-header">
+          <span class="step-number">Step 9</span>
+          <span class="step-title-text">Assemble in the Hammond 1551G Enclosure</span>
+        </div>
+        <div class="step-body">
+          <p>The Hammond 1551G is a two-piece ABS plastic enclosure. The PCB and wiring sit inside one half; the lid snaps or screws on to complete the assembly.</p>
+
+          <ol>
+            <li><strong>Plan cable routing first.</strong> Before final assembly, lay out the PCB and DIN connector cables inside the enclosure to confirm everything fits and the lid closes cleanly.</li>
+            <li>The DIN connector cables exit through the two short sides of the enclosure (a rubber or silicone strain relief is recommended). You may need to cut or file small slots or holes in the enclosure ends to allow the cables to pass through cleanly. Use a small file or rotary tool.</li>
+            <li>If installing a green LED indicator (see optional step below), drill a small hole in the lid for the LED now, before closing the enclosure.</li>
+            <li>Position the PCB inside the enclosure. The screw holes in the 1551G align with standard PCB mounting holes using self-tapping #2 x 3/16" screws (not included with Hammond enclosures – see Hammond P/N 1551ATS100) — otherwise, the PCB may be secured with a small amount of non-conductive adhesive or simply resting snugly in the enclosure.</li>
+            <li>Route cables neatly and close the lid. Secure with the supplied screws.</li>
+          </ol>
+
+          <div class="img-block">
+            <img src="img/Finished unit in the black Hammond case.jpg" alt="Completed C64 Saver in black Hammond enclosure">
+            <div class="img-caption">Completed C64 Saver assembled in the black Hammond 1551G enclosure.</div>
+          </div>
+
+          <div class="img-block img-sm">
+            <img src="img/C64Saver_v2_4_FirstBuild_20200315.jpg" alt="C64 Saver first build - side view">
+            <div class="img-caption">Another angle of a completed assembled unit.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── OPTIONAL: LED Indicator ────────────────────────────── -->
+      <div class="step-block" id="step-led">
+        <div class="step-header">
+          <span class="step-number">Optional</span>
+          <span class="step-title-text">Green LED Power Indicator</span>
+          <span class="optional-badge">Optional</span>
+        </div>
+        <div class="step-body">
+          <p>A green LED can be added as a visual indicator that 5VDC is present and within safe operating range on the output side (J6). When the C64 Saver trips due to an over-voltage, the LED will also extinguish — confirming the protection circuit activated.</p>
+
+          <h4>Parts Needed</h4>
+          <ul>
+            <li>1× 3mm green LED (standard diffused)</li>
+            <li>1× 330Ω resistor (1/4W)</li>
+          </ul>
+
+          <h4>Wiring</h4>
+          <p>Solder the 330Ω resistor in series with the LED anode (longer lead). Connect this series combination between the <strong>+5VDC output</strong> (J6-5V terminal) and <strong>GND</strong> (J6-GND terminal).</p>
+          <ul>
+            <li>LED anode (+, longer lead) → 330Ω resistor → J6-5V</li>
+            <li>LED cathode (−, shorter lead) → J6-GND</li>
+          </ul>
+
+          <div class="callout caution">
+            <div class="callout-icon">&#9888;&#65039;</div>
+            <div class="callout-body">
+              <div class="callout-title">Polarity</div>
+              <p>LEDs are polarized. The longer lead is the anode (+). Connecting the LED backwards will prevent it from lighting but will not damage the circuit. If your LED doesn't light after assembly, try reversing it.</p>
+            </div>
+          </div>
+
+          <p>Drill a 3mm hole in the Hammond enclosure lid for the LED before final assembly. The LED can be press-fit or secured with a small dab of hot glue.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 8 — TESTING & VERIFICATION
+    ══════════════════════════════════════════════════════════ -->
+    <section id="testing">
+      <div class="section-header">
+        <div class="section-icon">&#128270;</div>
+        <h2>Testing &amp; Verification</h2>
+      </div>
+
+      <p>Before plugging the C64 Saver into your Commodore 64 for the first time, perform the following checks. Taking five minutes here can save your machine.</p>
+
+      <div class="callout warning">
+        <div class="callout-icon">&#9888;&#65039;</div>
+        <div class="callout-body">
+          <div class="callout-title">Power Off During Inspection</div>
+          <p>Perform all visual inspection and continuity checks with the power supply <strong>completely unplugged from the wall</strong>. Only apply power at the final voltage verification step, and never while your hands are in contact with the circuit.</p>
+        </div>
+      </div>
+
+      <h3>Step A — Jumper Continuity Check</h3>
+      <p>Set your multimeter to continuity mode (beep/diode setting). Probe across the two pads at <strong>J2</strong> and confirm continuity. Repeat for <strong>J5</strong>. Both jumpers must show a solid beep. If either fails, re-inspect the solder joint or jumper wire.</p>
+
+      <h3>Step B — Visual Solder Bridge Inspection</h3>
+      <p>Using a magnifying glass or loupe, carefully inspect:</p>
+      <ul>
+        <li>The <strong>rear of the female DIN connector</strong> — look for solder bridges (unintended blobs connecting adjacent pins). Any bridge between Pin 5 (+5V) and Pins 6/7 (9VAC) will cause instant C64 damage when powered.</li>
+        <li>The <strong>Q2 MOSFET front leads</strong> — confirm the three small pads are separate with no bridges between them.</li>
+        <li>The <strong>J1 and J6 terminal blocks</strong> — confirm no solder whiskers have bridged adjacent terminals.</li>
+      </ul>
+
+      <h3>Step C — Component Polarity Re-Check</h3>
+      <p>Before powering up, take one final look at all polarized components:</p>
+      <ul>
+        <li><strong>C1</strong> — stripe (negative) band on body should face away from the "+" pad marking on the silkscreen.</li>
+        <li><strong>D1</strong> — flat face of TO-92 body matches silkscreen orientation.</li>
+        <li><strong>D2, D3</strong> — cathode bands align with the band marks on the silkscreen.</li>
+        <li><strong>Q1</strong> — flat face of TO-92 body matches silkscreen orientation.</li>
+        <li><strong>Q2</strong> — metal tab faces toward the large rear pad.</li>
+      </ul>
+
+      <h3>Step D — First Power Test</h3>
+      <ol>
+        <li>Connect the C64 PSU to the female DIN input of the C64 Saver. Do <em>not</em> yet connect the male DIN output to the C64.</li>
+        <li>Plug the PSU into the wall. If the optional LED is installed, it should illuminate green.</li>
+        <li>Set your multimeter to DC voltage mode. Probe the J6-5V terminal (positive probe) and J6-GND terminal (negative probe). You should read approximately <strong>4.85–5.15VDC</strong>. Anything significantly above 5.5V suggests a PSU fault; below 4.5V may indicate a wiring issue.</li>
+        <li>Set the multimeter to AC voltage mode. Probe the J6-9VAC terminal and J6-GND. You should read approximately <strong>9VAC</strong>.</li>
+        <li>If all measurements are correct, unplug the PSU, wait for it to fully discharge, and then connect the male DIN output to your C64.</li>
+      </ol>
+
+      <div class="callout note">
+        <div class="callout-icon">&#128161;</div>
+        <div class="callout-body">
+          <div class="callout-title">All Good?</div>
+          <p>Congratulations — your C64 Saver is complete! It will now silently monitor your C64's 5VDC supply every moment it's in use. If your PSU ever fails with an over-voltage condition, the Saver will trip and protect your machine.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 9 — CREDITS & ATTRIBUTION
+    ══════════════════════════════════════════════════════════ -->
+    <section id="credits">
+      <div class="section-header">
+        <div class="section-icon">&#127942;</div>
+        <h2>Credits &amp; Attribution</h2>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3>Circuit Design</h3>
+          <p>The C64 Saver V2.4 circuit was designed by <strong>bwack</strong> — an electronics enthusiast and prolific contributor to the Commodore retro community. bwack has released the design openly for the community to build and enjoy.</p>
+          <ul>
+            <li><a href="https://www.youtube.com/@bwack" target="_blank" rel="noopener">bwack on YouTube</a></li>
+            <li><a href="https://github.com/bwack" target="_blank" rel="noopener">bwack on GitHub</a></li>
+          </ul>
+          <p>If you find bwack's work valuable, consider supporting the channel.</p>
+        </div>
+        <div>
+          <h3>Build Guide</h3>
+          <p>This written guide was produced by <strong>MindFlareRetro</strong>, a Commodore and retro computing channel dedicated to preserving and enjoying classic hardware. The guide is based on bwack's original documentation, assembly notes, and the MFR video build series.</p>
+          <ul>
+            <li><a href="https://www.youtube.com/@MindFlareRetro" target="_blank" rel="noopener">MindFlareRetro on YouTube</a></li>
+            <li><a href="https://www.mindflareretro.com" target="_blank" rel="noopener">mindflareretro.com</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout note" style="margin-top:1rem;">
+        <div class="callout-icon" style="font-size:2.5rem; font-family:Arial,sans-serif; margin-top:0; align-self:center; margin-left:-0.3rem;">&#169;</div>
+        <div class="callout-body">
+          <p>The C64 Saver circuit design is the intellectual property of @bwack. This build guide is the work of MindFlareRetro and is provided for personal, non-commercial use. Please credit both bwack and MindFlareRetro if you reproduce or adapt this content.</p>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /main-content -->
+</div><!-- /layout -->
+
+<!-- ════════════════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════════════════ -->
+<footer id="site-footer">
+  <a href="https://www.mindflareretro.com" target="_blank" rel="noopener">
+    <img src="img/mfr_allwht_footer.png" alt="MindFlareRetro">
+  </a>
+  <div>
+    <a href="https://www.mindflareretro.com" target="_blank" rel="noopener">mindflareretro.com</a>
+    &nbsp;·&nbsp;
+    <a href="https://www.youtube.com/@MindFlareRetro" target="_blank" rel="noopener">YouTube</a>
+    &nbsp;·&nbsp;
+    C64 Saver circuit design by <a href="https://github.com/bwack" target="_blank" rel="noopener">@bwack</a>
+  </div>
+  <div class="footer-disclaimer">
+    This build guide is provided for educational and informational purposes only. MindFlareRetro assumes no liability for damage to equipment, property, or persons resulting from the construction, modification, or use of the device described herein. All trademarks and product names are the property of their respective owners. Commodore 64 is a trademark of Commodore Business Machines, Ltd.
+  </div>
+  <div style="margin-top:1rem; font-size:.75rem; opacity:0.6;">&copy; <span id="copyright-year"></span> MindFlareRetro</div>
+</footer>
+
+<!-- ── Lightbox ──────────────────────────────────────────────────── -->
+<div id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════════════════════ -->
+<script>
+  /* ── TOC Collapse (mobile) ───────────────────────────────────── */
+  function toggleToc() {
+    var toc = document.getElementById('toc');
+    var btn = document.getElementById('toc-toggle');
+    var open = toc.classList.toggle('toc-open');
+    btn.setAttribute('aria-expanded', open);
+  }
+
+  /* ── Skill Level Toggle ──────────────────────────────────────── */
+  function setSkill(level) {
+    document.body.classList.remove('skill-novice', 'skill-intermediate');
+    document.body.classList.add('skill-' + level);
+    document.getElementById('btn-novice').classList.toggle('active', level === 'novice');
+    document.getElementById('btn-intermediate').classList.toggle('active', level === 'intermediate');
+    // Persist preference
+    try { localStorage.setItem('c64saver-skill', level); } catch(e) {}
+  }
+
+  // Restore preference
+  try {
+    var saved = localStorage.getItem('c64saver-skill');
+    if (saved === 'intermediate') setSkill('intermediate');
+  } catch(e) {}
+
+  /* ── Active TOC Highlighting ─────────────────────────────────── */
+  (function() {
+    var tocLinks = document.querySelectorAll('#toc a');
+    var sections = [];
+    tocLinks.forEach(function(link) {
+      var id = link.getAttribute('href').slice(1);
+      var el = document.getElementById(id);
+      if (el) sections.push({ id: id, el: el, link: link });
+    });
+
+    function onScroll() {
+      var scrollY = window.scrollY + 90;
+      var active = null;
+      for (var i = sections.length - 1; i >= 0; i--) {
+        if (sections[i].el.getBoundingClientRect().top + window.scrollY <= scrollY) {
+          active = sections[i];
+          break;
+        }
+      }
+      tocLinks.forEach(function(l) { l.classList.remove('toc-active'); });
+      if (active) active.link.classList.add('toc-active');
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  /* ── Lightbox ────────────────────────────────────────────────── */
+  function openLightbox(el) {
+    var img = el.querySelector('img');
+    if (!img) return;
+    var lb = document.getElementById('lightbox');
+    document.getElementById('lightbox-img').src = img.src;
+    document.getElementById('lightbox-img').alt = img.alt;
+    lb.classList.add('active');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  /* ── Dynamic Copyright Year ──────────────────────────────────── */
+  document.getElementById('copyright-year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
