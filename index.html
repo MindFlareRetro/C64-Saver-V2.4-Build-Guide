@@ -331,8 +331,7 @@
       cursor: pointer;
       display: inline-block;
     }
-    .img-enlarge::after {
-      content: '\1F50D';
+    .img-enlarge .enlarge-icon {
       position: absolute;
       bottom: 8px;
       right: 8px;
@@ -341,10 +340,36 @@
       color: #fff;
       border-radius: 4px;
       padding: 4px 8px;
-      pointer-events: none;
       line-height: 1;
       border: 1px solid rgba(0,0,0,0.2);
+      cursor: pointer;
     }
+    .enlarge-icon .enlarge-tip {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 8px);
+      right: 0;
+      background: var(--mfr-navy);
+      color: var(--mfr-white);
+      font-family: var(--font-head);
+      font-size: .7rem;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+      padding: .35rem .65rem;
+      border-radius: 4px;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      pointer-events: none;
+    }
+    .enlarge-icon .enlarge-tip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      right: 12px;
+      border: 5px solid transparent;
+      border-top-color: var(--mfr-navy);
+    }
+    .enlarge-icon:hover .enlarge-tip { display: block; }
     .img-enlarge:hover { opacity: 0.9; }
 
     /* ── Lightbox overlay ───────────────────────────────────────── */
@@ -1909,6 +1934,18 @@
   }
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeLightbox();
+  });
+
+  /* ── Inject lightbox enlarge icons ────────────────────────────── */
+  document.querySelectorAll('.img-enlarge').forEach(function(el) {
+    var icon = document.createElement('span');
+    icon.className = 'enlarge-icon';
+    icon.textContent = '\uD83D\uDD0D';
+    var tip = document.createElement('span');
+    tip.className = 'enlarge-tip';
+    tip.textContent = 'Click to enlarge';
+    icon.appendChild(tip);
+    el.appendChild(icon);
   });
 
   /* ── Dynamic Copyright Year ──────────────────────────────────── */
