@@ -627,6 +627,8 @@
     }
     #site-footer img { margin: 0 auto .75rem; max-height: 36px; border-radius: 0; }
     #site-footer a { color: #6eaae0; }
+    .footer-subtle-link { color: inherit; text-decoration: none; transition: color .2s ease; }
+    .footer-subtle-link:hover { color: #a0c8e8; }
     #site-footer .footer-disclaimer {
       max-width: 700px;
       margin: .75rem auto 0;
@@ -838,7 +840,7 @@
         <h2>Introduction</h2>
       </div>
 
-      <p>The original Commodore 64 power supply — that iconic black "brick" with the C= logo — is one of the most notorious failure points in the entire C64 ecosystem. After decades of use, the internal 5VDC voltage regulator can fail <strong>catastrophically</strong>, sending an uncontrolled surge of voltage directly into your C64's sensitive RAM chips and integrated circuits. The result is permanent, often irreparable damage to a machine that may have survived 40+ years.</p>
+      <p>The original Commodore 64 power supply — that iconic black "brick" with the C= logo — is one of the most notorious failure points in the entire C64 ecosystem. After decades of use, the internal 5VDC voltage regulator can fail <strong>catastrophically</strong>, sending an uncontrolled surge of voltage directly into your C64's sensitive RAM chips and integrated circuits. The result is permanent, often irreparable damage to a machine that may have survived <span id="c64-age"></span>+ years.</p>
 
       <div class="img-block">
         <img src="img/c64-psu-uscan-euro-divider-16-9.png" alt="Original Commodore 64 power supplies — US/Canada brick (left) and European wedge (right)">
@@ -1855,7 +1857,7 @@
     C64 Saver circuit design by <a href="https://github.com/bwack" target="_blank" rel="noopener">@bwack</a>
   </div>
   <div class="footer-disclaimer">
-    This build guide is provided for educational and informational purposes only. MindFlareRetro assumes no liability for damage to equipment, property, or persons resulting from the construction, modification, or use of the device described herein. All trademarks and product names are the property of their respective owners. Commodore 64 is a trademark of Commodore Business Machines, Ltd.
+    This build guide is provided for educational and informational purposes only. MindFlareRetro assumes no liability for damage to equipment, property, or persons resulting from the construction, modification, or use of the device described herein. All trademarks and product names are the property of their respective owners. Commodore 64 is a trademark of <a href="https://www.commodore.net/" target="_blank" rel="noopener" class="footer-subtle-link">Commodore International Corporation</a>.
   </div>
   <div style="margin-top:1rem; font-size:.75rem; opacity:0.6;">&copy; <span id="copyright-year"></span> MindFlareRetro</div>
 </footer>
@@ -1948,8 +1950,10 @@
     el.appendChild(icon);
   });
 
-  /* ── Dynamic Copyright Year ──────────────────────────────────── */
-  document.getElementById('copyright-year').textContent = new Date().getFullYear();
+  /* ── Dynamic Year Calculations ────────────────────────────────── */
+  var now = new Date();
+  document.getElementById('copyright-year').textContent = now.getFullYear();
+  document.getElementById('c64-age').textContent = now.getFullYear() - 1982 - (now.getMonth() < 7 ? 1 : 0);
 </script>
 
 </body>
