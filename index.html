@@ -630,7 +630,7 @@
     #site-footer .footer-subtle-link { color: #5a7a9a; text-decoration: none; transition: color .2s ease; }
     #site-footer .footer-subtle-link:hover { color: #c0daf0; }
     #site-footer .footer-disclaimer {
-      max-width: 700px;
+      max-width: 733px;
       margin: .75rem auto 0;
       font-size: .75rem;
       line-height: 1.5;
@@ -716,13 +716,39 @@
       section { padding: 1.25rem 1.1rem; }
       .hero-img { display: none; }
       .two-col { grid-template-columns: 1fr; }
-      #guide-title .title-main { font-size: .95rem; }
+      #guide-title { margin-left: .5rem; min-width: 0; }
+      #guide-title .title-main { font-size: .85rem; }
       .toggle-label { display: none; }
     }
     @media (max-width: 480px) {
-      :root { --header-h: 56px; }
-      #mfr-logo { height: 34px; }
+      :root { --header-h: auto; }
+      #site-header {
+        flex-wrap: wrap;
+        padding: .4rem .75rem;
+        gap: .4rem;
+        height: auto;
+      }
+      #mfr-logo { height: 28px; }
+      #guide-title {
+        margin-left: 0;
+        flex: 1;
+        min-width: 0;
+      }
+      #guide-title .title-main {
+        font-size: .75rem;
+        letter-spacing: .02em;
+      }
+      #skill-toggle {
+        gap: .3rem;
+      }
+      .skill-btn {
+        font-size: .6rem;
+        padding: .2rem .45rem;
+        border-width: 1.5px;
+      }
       section { padding: 1rem .85rem; }
+      html { scroll-padding-top: 70px; }
+      #toc { top: 58px; }
     }
   </style>
 </head>
@@ -840,7 +866,7 @@
         <h2>Introduction</h2>
       </div>
 
-      <p>The original Commodore 64 power supply — that iconic black "brick" with the C= logo — is one of the most notorious failure points in the entire C64 ecosystem. After decades of use, the internal 5VDC voltage regulator can fail <strong>catastrophically</strong>, sending an uncontrolled surge of voltage directly into your C64's sensitive RAM chips and integrated circuits. The result is permanent, often irreparable damage to a machine that may have survived <span id="c64-age"></span>+ years.</p>
+      <p>The original Commodore 64 power supply — that iconic black or beige "brick" for some of us — with the <img src="img/commodore_logo_icon_blk.svg" alt="C=" style="height: 1em; vertical-align: -0.15em; display: inline;"> logo, is one of the most notorious failure points in the entire C64 ecosystem. After decades of use, the internal 5VDC voltage regulator can fail <strong>catastrophically</strong>, sending an uncontrolled surge of voltage directly into your C64's sensitive RAM chips and integrated circuits. The result is permanent, often irreparable damage to a machine that may have survived <span id="c64-age"></span>+ years.</p>
 
       <div class="img-block">
         <img src="img/c64-psu-uscan-euro-divider-16-9.jpg" alt="Original Commodore 64 power supplies — US/Canada brick (left) and European wedge (right)">
@@ -1857,7 +1883,7 @@
     C64 Saver circuit design by <a href="https://github.com/bwack" target="_blank" rel="noopener">@bwack</a>
   </div>
   <div class="footer-disclaimer">
-    This build guide is provided for educational and informational purposes only. MindFlareRetro assumes no liability for damage to equipment, property, or persons resulting from the construction, modification, or use of the device described herein. All trademarks and product names are the property of their respective owners. Commodore 64 is a trademark of <a href="https://www.commodore.net/" target="_blank" rel="noopener" class="footer-subtle-link">Commodore International Corporation</a>.
+    This build guide is provided for educational and informational purposes only. MindFlareRetro assumes no liability for damage to equipment, property, or persons resulting from the construction, modification, or use of the device described herein. All trademarks and product names are the property of their respective owners. Commodore 64 and the Commodore logo are trademarks of <a href="https://www.commodore.net/" target="_blank" rel="noopener" class="footer-subtle-link">Commodore International Corporation</a>.
   </div>
   <div style="margin-top:1rem; font-size:.75rem; opacity:0.6;">&copy; <span id="copyright-year"></span> MindFlareRetro</div>
 </footer>
