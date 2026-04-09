@@ -451,8 +451,8 @@
       display: inline-block;
       white-space: nowrap;
     }
-    .lnk-ca { background: #e8f0fd; color: #14397a; border: 1px solid #b3ccf7; }
-    .lnk-us { background: #e6f4ea; color: #1a5c2e; border: 1px solid #a8d8b0; }
+    .lnk-ca { background: #e8f0fd; color: #14397a; border: 1px solid #b3ccf7; font-size: .8rem; padding: .15rem .4rem; border-radius: 4px; display: inline-block; white-space: nowrap; text-decoration: none; }
+    .lnk-us { background: #e6f4ea; color: #1a5c2e; border: 1px solid #a8d8b0; font-size: .8rem; padding: .15rem .4rem; border-radius: 4px; display: inline-block; white-space: nowrap; text-decoration: none; }
     .bom-section-header td {
       background: var(--mfr-blue) !important;
       color: white;
@@ -1014,7 +1014,7 @@
           <ul>
             <li><strong>1× Female 7-pin 270° DIN connector</strong> with short cable (PSU input side → J1 IN)</li>
             <li><strong>1× Male 7-pin 270° DIN connector</strong> with short cable (C64 output side → J6 OUT)</li>
-            <li><strong>Hookup wire</strong> — 4 conductors, ideally colour-coded (red, black, and 2× a third colour for 9VAC)</li>
+            <li><strong>Hookup wire</strong> — 4 conductors, ideally colour-coded (red, black, and 2× a third colour for 9VAC). Two short lengths needed (13–15 cm / 5–6 inches each should be sufficient). The build photos in this guide use Tensility 4-conductor 18AWG — <a href="https://www.digikey.ca/short/fd24cprr" target="_blank" rel="noopener" class="lnk-ca">DigiKey CA</a> / <a href="https://www.digikey.com/short/fhn8mb8w" target="_blank" rel="noopener" class="lnk-us">DigiKey US</a>.</li>
             <li><strong>Hammond 1551G enclosure</strong> — grey, black, or translucent blue (listed below)</li>
             <li><em>Optional:</em> 3mm green LED + 330Ω resistor (for power indicator)</li>
           </ul>
@@ -1057,7 +1057,7 @@
             <tr>
               <td class="ref">R4</td>
               <td>Metal Film Resistor</td>
-              <td>330 k&#8486; <span class="badge badge-blue" title="Suitable alternates: 300k or 360k at 5% tolerance">note</span></td>
+              <td>330 k&#8486;</td>
               <td>1</td>
               <td class="pn">RNMF14FTC330K</td>
               <td class="bom-links"><a href="https://www.digikey.ca/short/ph4tbp" target="_blank" rel="noopener" class="lnk-ca">DigiKey CA</a></td>
@@ -1172,7 +1172,7 @@
         </div>
         <div style="flex:1 1 45%; min-width:240px; text-align:center;">
           <img src="img/C64 Saver V2.4 3D Printed Case by @leelegionsmith.jpg" alt="3D printed C64 Saver enclosure" style="width:100%; height:auto; border-radius:var(--radius); box-shadow:var(--shadow);">
-          <div class="img-caption" style="display:block;">Alternative: 3D-printed enclosure by @leelegionsmith.</div>
+          <div class="img-caption" style="display:block;">Alternative: 3D-printed enclosure by @leelegionsmith on <a href="https://www.printables.com/model/106673-c64-saver-case" target="_blank" rel="noopener">Printables.com</a>.</div>
         </div>
       </div>
     </section>
@@ -1233,7 +1233,7 @@
         <div class="callout-icon">&#9888;&#65039;</div>
         <div class="callout-body">
           <div class="callout-title">Before You Begin</div>
-          <p>Keep the PCB component layout image (shown in Theory of Operation, above) open for reference throughout assembly. Always confirm component values and orientations against both this guide and the PCB silkscreen before soldering.</p>
+          <p>Keep the PCB component layout image (shown <a href="#theory">above</a>) open for reference throughout assembly. Always confirm component values and orientations against both this guide and the PCB silkscreen before soldering.</p>
         </div>
       </div>
 
@@ -1336,7 +1336,7 @@
             <div class="callout-icon">&#9888;&#65039;</div>
             <div class="callout-body">
               <div class="callout-title">Double-Check Your Positions</div>
-              <p>Installing a resistor in the wrong position is the most common mistake. The values are similar (3.9k vs 3.3k vs 33k) and easy to confuse. Before soldering <em>each</em> resistor, confirm the value against the silkscreen label and the BOM.</p>
+              <p>Installing a resistor in the wrong position is the most common mistake — values are similar (3.9k vs 3.3k vs 33k) and easy to confuse. Before soldering <em>each</em> resistor, confirm the value against the silkscreen label and the BOM.</p>
               <p>In particular: <strong>R4 (330k&#8486;)</strong> is the outlier — over 80× the value of R2/R3/R5. Installing it in the wrong position will affect the trip-point voltage.</p>
             </div>
           </div>
@@ -1529,8 +1529,8 @@
         <div class="step-body">
           <p>The C64 Saver requires two 7-pin DIN connectors:</p>
           <ul>
-            <li><strong>Female 7-pin DIN</strong> — INPUT side. This receives the male DIN plug coming from the C64 PSU cable.</li>
-            <li><strong>Male 7-pin DIN</strong> — OUTPUT side. This plugs directly into the female DIN port on the back of the Commodore 64.</li>
+            <li><strong>Female 7-pin 270° DIN</strong> — INPUT side. This receives the male DIN plug coming from the C64 PSU cable.</li>
+            <li><strong>Male 7-pin 270° DIN</strong> — OUTPUT side. This plugs directly into the female DIN port on the back of the Commodore 64.</li>
           </ul>
 
           <p>Each connector is wired the same way — same pins, same signals. Refer to the pinout diagram below. Note that the pinout is described from the <strong>front (plug/socket face) view</strong>; when you flip the connector over to solder from the rear, the pin positions are <em>mirrored</em>.</p>
