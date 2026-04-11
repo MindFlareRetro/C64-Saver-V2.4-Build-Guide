@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" type="image/x-icon" href="img/favicon_BluBg.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>C64 Saver V2.4 Build Guide — MindFlareRetro</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -613,7 +614,7 @@
       padding: .25rem .75rem;
       border-radius: 20px;
     }
-    .hero-img { flex: 0 0 360px; max-width: 360px; }
+    .hero-img { flex: 0 0 375px; max-width: 375px; }
     .hero-img img { border-radius: var(--radius); box-shadow: 0 4px 20px rgba(0,0,0,.4); }
 
     /* ── Footer ──────────────────────────────────────────────────── */
@@ -853,7 +854,7 @@
         <span class="hero-pill">Build Guide by MindFlareRetro</span>
       </div>
       <div class="hero-img">
-        <img src="img/Fully_assembled_C64_Saver__v2_4__Plugged_In.jpg" alt="Completed C64 Saver plugged in and running">
+        <img src="img/Fully_assembled_C64_Saver__v2_4__Plugged_In_sml.jpg" alt="Completed C64 Saver plugged in and running" id="hero-photo">
       </div>
     </div>
 
@@ -1962,6 +1963,16 @@
   }
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeLightbox();
+  });
+
+  /* ── Easter egg: Shift+click hero image ───────────────────────── */
+  document.getElementById('hero-photo').addEventListener('click', function(e) {
+    if (e.shiftKey) {
+      var lb = document.getElementById('lightbox');
+      document.getElementById('lightbox-img').src = this.src;
+      document.getElementById('lightbox-img').alt = this.alt;
+      lb.classList.add('active');
+    }
   });
 
   /* ── Inject lightbox enlarge icons ────────────────────────────── */
