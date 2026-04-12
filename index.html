@@ -444,7 +444,7 @@
     .bom-table tr:hover td { background: #eef3fb; }
     .bom-table .ref { font-family: monospace; font-weight: 700; color: var(--mfr-navy-mid); white-space: nowrap; }
     .bom-table .pn  { font-family: monospace; font-size: .82rem; color: var(--color-muted); }
-    .bom-links { display: flex; flex-direction: column; gap: .2rem; }
+    .bom-links { white-space: nowrap; }
     .bom-links a {
       font-size: .8rem;
       padding: .15rem .4rem;
@@ -454,6 +454,7 @@
     }
     .lnk-ca { background: #e8f0fd; color: #14397a; border: 1px solid #b3ccf7; font-size: .8rem; padding: .15rem .4rem; border-radius: 4px; display: inline-block; white-space: nowrap; text-decoration: none; }
     .lnk-us { background: #e6f4ea; color: #1a5c2e; border: 1px solid #a8d8b0; font-size: .8rem; padding: .15rem .4rem; border-radius: 4px; display: inline-block; white-space: nowrap; text-decoration: none; }
+    .callout.note .lnk-us { background: #ddf1e2; border-color: #a0cda8; }
     .bom-section-header td {
       background: var(--mfr-blue) !important;
       color: white;
@@ -699,7 +700,9 @@
       section { max-width: 100%; overflow-x: hidden; }
       .img-row { flex-wrap: wrap; }
       .pin-table, .rcc-table { display: block; overflow-x: auto; }
-      .bom-table { font-size: .75rem; }
+      .pin-table { font-size: .88rem; }
+      .pin-table th { padding: .3rem .4rem; font-size: .7rem; }
+      .pin-table td { padding: .3rem .4rem; }
       .img-row .img-block { min-width: calc(50% - .5rem); }
       #toc {
         position: sticky;
@@ -801,7 +804,7 @@
       <li><a href="#safety">Safety &amp; Disclaimer</a></li>
       <li><a href="#theory">Theory of Operation</a></li>
       <li class="novice-only"><a href="#tools">What You'll Need</a></li>
-      <li><a href="#bom">Bill of Materials</a></li>
+      <li><a href="#bom">Bill of Materials (BOM)</a></li>
       <li><a href="#videos">Video Series</a></li>
       <li><a href="#build">Step-by-Step Build</a></li>
       <ul class="toc-sub">
@@ -1039,7 +1042,7 @@
     <section id="bom">
       <div class="section-header">
         <div class="section-icon">&#128203;</div>
-        <h2>Bill of Materials</h2>
+        <h2>Bill of Materials (BOM)</h2>
       </div>
 
       <p>The following components are required to build the C64 Saver V2.4 PCB. Purchase links are provided for DigiKey Canada (.ca) and DigiKey USA (.com). All links have been verified at time of publication.</p>
