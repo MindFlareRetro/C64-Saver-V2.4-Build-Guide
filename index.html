@@ -231,14 +231,13 @@
     /* ── Callout Boxes ───────────────────────────────────────────── */
     .callout {
       border-radius: var(--radius);
-      padding: .65rem .9rem;
+      padding: .65rem .9rem .65rem 2.5rem;
       margin: 1rem 0;
       border-left: 5px solid;
-      display: flex;
-      gap: .5rem;
+      position: relative;
     }
-    .callout-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: -.3rem; }
-    .callout-body { flex: 1; font-size: .9rem; line-height: 1.4; }
+    .callout-icon { font-size: 1.2rem; position: absolute; left: .65rem; top: .35rem; }
+    .callout-body { font-size: .9rem; line-height: 1.4; }
     .callout-body p:last-child { margin-bottom: 0; }
     .callout-title { font-family: var(--font-head); font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: .2rem; }
     .warning {
@@ -246,12 +245,14 @@
       border-color: var(--color-warn-bdr);
       color: var(--color-warn-txt);
     }
+    .warning .callout-icon { top: .15rem; }
     .warning .callout-title { color: var(--color-warn-bdr); }
     .caution {
       background: var(--color-caut-bg);
       border-color: var(--color-caut-bdr);
       color: var(--color-caut-txt);
     }
+    .caution .callout-icon { top: .15rem; }
     .caution .callout-title { color: var(--color-caut-bdr); }
     .tip {
       background: var(--color-tip-bg);
@@ -1884,7 +1885,7 @@
       </div>
 
       <div class="callout note" style="margin-top:1rem;">
-        <div class="callout-icon" style="font-size:2.5rem; font-family:Arial,sans-serif; margin-top:0; align-self:center; margin-left:-0.3rem;">&#169;</div>
+        <div class="callout-icon" style="font-size:1.8rem; font-family:Arial,sans-serif; top:.1rem; left:.45rem;">&#169;</div>
         <div class="callout-body">
           <p>The C64 Saver circuit design is the intellectual property of @bwack. This build guide is the work of MindFlareRetro and is provided for personal, non-commercial use. Please credit both bwack and MindFlareRetro if you reproduce or adapt this content.</p>
         </div>
