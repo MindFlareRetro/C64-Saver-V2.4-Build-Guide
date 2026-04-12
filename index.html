@@ -603,8 +603,14 @@
       font-size: 1rem;
       margin-bottom: 1rem;
     }
+    .hero-pills {
+      display: inline-flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
     .hero-pill {
-      display: inline-block;
+      display: block;
+      text-align: center;
       background: var(--mfr-blue);
       color: white;
       font-family: var(--font-head);
@@ -850,8 +856,10 @@
         </svg>
         <div class="hero-title">C64 Saver V2.4<br>Build Guide</div>
         <div class="hero-subtitle">Protect your Commodore 64 from power supply failure</div>
-        <span class="hero-pill">PCB Project Design by @bwack</span>
-        <span class="hero-pill">Build Guide by MindFlareRetro</span>
+        <div class="hero-pills">
+          <span class="hero-pill">PCB Project Design by @bwack</span>
+          <span class="hero-pill">Build Guide by MindFlareRetro</span>
+        </div>
       </div>
       <div class="hero-img">
         <img src="img/Fully_assembled_C64_Saver__v2_4__Plugged_In_sml.jpg" alt="Completed C64 Saver plugged in and running" id="hero-photo">
